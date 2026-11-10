@@ -1,4 +1,5 @@
 import React, { Suspense } from "react";
+import Link from "next/link";
 import { getAllProducts, getCategories, STORE_NAME } from "@/lib/medusa";
 import { ShopClient } from "@/components/ShopClient";
 
@@ -16,25 +17,37 @@ export default async function ShopPage() {
   ]);
 
   return (
-    <div className="space-y-6">
-      <div className="border-b border-zinc-200 pb-5">
-        <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-zinc-900">
-          Shop All Products
-        </h1>
-        <p className="text-sm text-zinc-600 mt-1 max-w-2xl">
-          Browse our entire catalog. Filter by category, price, options and more.
-        </p>
-      </div>
+    <div className="min-h-screen">
+      {/* ══ Hero ══ */}
+      <section className="bg-hero py-12 text-center border-b border-line/60">
+        <div className="max-w-[1240px] mx-auto px-6">
+          <p className="text-[10px] font-semibold tracking-[0.16em] uppercase text-aura-gray mb-3">
+            <Link href="/" className="hover:text-ink transition-colors">
+              HOME
+            </Link>{" "}
+            / SHOP
+          </p>
+          <h1 className="font-serif text-4xl sm:text-5xl font-medium text-ink mb-2">
+            Shop All
+          </h1>
+          <p className="text-xs sm:text-sm text-aura-gray max-w-xl mx-auto">
+            Clean, clinically tested formulas for every step of your ritual.
+          </p>
+        </div>
+      </section>
 
-      <Suspense
-        fallback={
-          <div className="py-20 text-center text-xs font-mono text-zinc-500">
-            Loading catalog...
-          </div>
-        }
-      >
-        <ShopClient products={products} categories={categories} />
-      </Suspense>
+      {/* ══ Shop Content ══ */}
+      <div className="max-w-[1240px] mx-auto px-6 py-12">
+        <Suspense
+          fallback={
+            <div className="py-20 text-center text-xs font-mono text-aura-gray">
+              Loading catalog...
+            </div>
+          }
+        >
+          <ShopClient products={products} categories={categories} />
+        </Suspense>
+      </div>
     </div>
   );
 }

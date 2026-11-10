@@ -8,33 +8,67 @@ interface ProductSectionProps {
   title: string;
   subtitle?: string;
   products: Product[];
+  sectionKey?: string;
 }
 
-// One row of products on the home page: New Arrivals, Best Sellers, Trending Now
-// or Featured Products. The backend chooses the products; the title is the merchant's.
-export function ProductSection({ title, subtitle, products }: ProductSectionProps) {
+export function ProductSection({
+  title,
+  subtitle,
+  products,
+  sectionKey,
+}: ProductSectionProps) {
   if (products.length === 0) return null;
 
-  return (
-    <section className="space-y-6" aria-label={title}>
-      <div className="flex items-center justify-between pb-3 border-b border-zinc-200">
-        <div>
-          <h2 className="text-xl font-bold tracking-tight text-zinc-900">{title}</h2>
-          {subtitle && <p className="text-xs text-zinc-500 mt-0.5">{subtitle}</p>}
-        </div>
-        <Link
-          href="/shop"
-          className="text-xs font-semibold text-zinc-700 hover:text-black transition flex items-center gap-1"
-        >
-          <span>See all products</span>
-          <ArrowRight size={13} />
-        </Link>
-      </div>
+  const isBestSellers =
+    sectionKey === "best_sellers" ||
+    title.toLowerCase().includes("best seller");
+  const isFeatured =
+    sectionKey === "featured" ||
+    title.toLowerCase().includes("featured");
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-        {products.map((prod) => (
-          <ProductCard key={prod.id} product={prod} />
-        ))}
+  const actionText = isFeatured ? "EXPLORE ALL" : "VIEW ALL";
+
+  return (
+    <section
+      aria-label={title}
+      className={`py-16 ${
+        isBestSellers
+          ? "bg-soft border-b border-line"
+          : "bg-white border-b border-line"
+      }`}
+    >
+      <div className="max-w-[1240px] mx-auto px-6">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            {subtitle && (
+              <p className="text-[10px] font-semibold tracking-[0.2em] uppercase text-aura-gray mb-1">
+                {subtitle}
+              </p>
+            )}
+            <h2 className="text-[17px] font-bold tracking-[0.12em] uppercase text-ink">
+              {title}
+            </h2>
+          </div>
+          <Link
+            href="/shop"
+            className="inline-flex items-center gap-2 text-[10.5px] font-semibold tracking-[0.16em] uppercase text-aura-gray hover:text-ink transition-colors group"
+          >
+            <span>{actionText}</span>
+            <ArrowRight className="w-[15px] h-[15px] group-hover:translate-x-1 transition-transform" />
+          </Link>
+        </div>
+
+        <div
+          className={`grid gap-6 ${
+            isBestSellers
+              ? "grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-5"
+              : "grid-cols-2 sm:grid-cols-2 lg:grid-cols-4"
+          }`}
+        >
+          {products.map((prod) => (
+            <ProductCard key={prod.id} product={prod} />
+          ))}
+        </div>
       </div>
     </section>
   );

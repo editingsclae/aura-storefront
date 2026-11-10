@@ -10,8 +10,9 @@ import {
 } from "@/lib/medusa";
 import { ProductGallery } from "@/components/ProductGallery";
 import { ProductDetailsClient } from "@/components/ProductDetailsClient";
+import { ProductAccordions } from "@/components/ProductAccordions";
 import { ProductCard } from "@/components/ProductCard";
-import { ChevronRight, ShieldCheck, Truck } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -29,7 +30,9 @@ export async function generateMetadata({ params }: ProductPageProps) {
     };
   }
 
-  const rawDesc = product.description || `Shop ${product.title} at ${STORE_NAME}. Cash on delivery.`;
+  const rawDesc =
+    product.description ||
+    `Shop ${product.title} at ${STORE_NAME}. Cash on delivery.`;
   const description = rawDesc.slice(0, 160);
   const ogImages = product.thumbnail ? [product.thumbnail] : [];
 
@@ -79,111 +82,91 @@ export default async function ProductPage({ params }: ProductPageProps) {
   }
 
   return (
-    <div className="space-y-12 max-w-6xl mx-auto">
-      {/* Breadcrumb Navigation */}
-      <nav className="flex items-center gap-2 text-xs text-zinc-500">
-        <Link href="/" className="hover:text-black transition">
-          {STORE_NAME}
-        </Link>
-        <ChevronRight size={14} />
-        <Link href="/shop" className="hover:text-black transition">
-          Shop
-        </Link>
-        <ChevronRight size={14} />
-        {primaryCategory && (
-          <>
-            <Link
-              href={`/c/${cleanCategoryHandle(primaryCategory.handle)}`}
-              className="hover:text-black transition"
-            >
-              {primaryCategory.name}
-            </Link>
-            <ChevronRight size={14} />
-          </>
-        )}
-        <span className="text-zinc-900 font-medium truncate max-w-xs">
-          {product.title}
-        </span>
+    <main className="max-w-[1240px] mx-auto px-6 py-8 sm:py-12">
+      {/* ── Breadcrumb ── */}
+      <nav aria-label="Breadcrumb" className="mb-8">
+        <p className="text-[10px] font-semibold tracking-[0.16em] uppercase text-aura-gray">
+          <Link href="/" className="hover:text-ink transition-colors">
+            HOME
+          </Link>{" "}
+          /{" "}
+          {primaryCategory ? (
+            <>
+              <Link
+                href={`/c/${cleanCategoryHandle(primaryCategory.handle)}`}
+                className="hover:text-ink transition-colors"
+              >
+                {primaryCategory.name.toUpperCase()}
+              </Link>{" "}
+              /{" "}
+            </>
+          ) : (
+            <>
+              <Link href="/shop" className="hover:text-ink transition-colors">
+                SHOP
+              </Link>{" "}
+              /{" "}
+            </>
+          )}
+          <span className="text-ink">{product.title}</span>
+        </p>
       </nav>
 
-      {/* Main Product Layout */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-14">
-        {/* Left: Interactive Accessible Gallery */}
-        <ProductGallery images={images} title={product.title} />
+      {/* ── Main Product Grid (Left: Gallery & Accordions; Right: Purchase Module) ── */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
+        {/* Left Column: Gallery & Accordions */}
+        <div className="lg:col-span-7 flex flex-col space-y-6">
+          <ProductGallery images={images} title={product.title} />
+          <ProductAccordions description={product.description} />
+        </div>
 
-        {/* Right: Product Info & Actions */}
-        <div className="space-y-6">
-          <div className="border-b border-zinc-200 pb-5">
-            <span className="text-xs uppercase tracking-wider font-semibold text-zinc-500">
-              {STORE_NAME}
-            </span>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-zinc-900 mt-1">
+        {/* Right Column: Sticky Purchase Details */}
+        <div className="lg:col-span-5 flex flex-col space-y-6 lg:sticky lg:top-24">
+          <div>
+            {primaryCategory && (
+              <p className="text-[10px] font-bold tracking-[0.16em] uppercase text-aura-gray mb-1">
+                {primaryCategory.name}
+              </p>
+            )}
+
+            <h1 className="font-serif text-3xl sm:text-4xl font-medium leading-tight text-ink mb-2">
               {product.title}
             </h1>
+
             {product.subtitle && (
-              <p className="text-sm text-zinc-500 mt-1">{product.subtitle}</p>
+              <p className="text-xs text-aura-gray mb-3">{product.subtitle}</p>
             )}
           </div>
 
-          {/* Client Interactive Area (Variant picker, Price, Add to Cart) */}
           <ProductDetailsClient product={product} />
-
-          {/* Product Description */}
-          {product.description && (
-            <div className="pt-6 border-t border-zinc-200">
-              <h2 className="text-xs font-bold uppercase tracking-wider text-zinc-800 mb-2">
-                Description
-              </h2>
-              <div className="text-sm text-zinc-600 leading-relaxed whitespace-pre-line">
-                {product.description}
-              </div>
-            </div>
-          )}
-
-          {/* Trust Badges */}
-          <div className="pt-6 border-t border-zinc-200 grid grid-cols-2 gap-4 text-xs text-zinc-600">
-            <div className="flex items-center gap-2.5 p-3 rounded-lg bg-zinc-50 border border-zinc-100">
-              <Truck size={18} className="text-zinc-700 shrink-0" />
-              <div>
-                <p className="font-semibold text-zinc-900">Nationwide Delivery</p>
-                <p className="text-[11px] text-zinc-500">Across Tunisia</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-2.5 p-3 rounded-lg bg-zinc-50 border border-zinc-100">
-              <ShieldCheck size={18} className="text-zinc-700 shrink-0" />
-              <div>
-                <p className="font-semibold text-zinc-900">Cash on Delivery</p>
-                <p className="text-[11px] text-zinc-500">Pay at your doorstep</p>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
 
-      {/* "You may also like" Section */}
+      {/* ── Related Products Row ── */}
       {relatedProducts.length > 0 && (
-        <div className="pt-8 border-t border-zinc-200 space-y-6">
-          <div className="flex items-center justify-between">
-            <h2 className="text-xl font-bold tracking-tight text-zinc-900">
-              You may also like
+        <section className="pt-16 mt-16 border-t border-line" aria-label="Related products">
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="text-[17px] font-bold tracking-[0.12em] uppercase text-ink">
+              YOU MAY ALSO LIKE
             </h2>
             {primaryCategory && (
               <Link
                 href={`/c/${cleanCategoryHandle(primaryCategory.handle)}`}
-                className="text-xs font-medium text-zinc-600 hover:text-black transition"
+                className="inline-flex items-center gap-2 text-[10.5px] font-semibold tracking-[0.16em] uppercase text-aura-gray hover:text-ink transition-colors group"
               >
-                View all in {primaryCategory.name} &rarr;
+                <span>EXPLORE ALL</span>
+                <ArrowRight className="w-[15px] h-[15px] group-hover:translate-x-1 transition-transform" />
               </Link>
             )}
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {relatedProducts.map((p) => (
               <ProductCard key={p.id} product={p} />
             ))}
           </div>
-        </div>
+        </section>
       )}
-    </div>
+    </main>
   );
 }

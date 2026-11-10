@@ -15,15 +15,13 @@ import { ProductSection } from "@/components/ProductSection";
 import { HeroSlider } from "@/components/HeroSlider";
 import { PromoBanners } from "@/components/PromoBanners";
 import { CategoryTiles } from "@/components/CategoryTiles";
-import { ArrowRight, Sparkles, LayoutGrid, PackageX } from "lucide-react";
+import { CATEGORY_TILE_PLACES } from "@/lib/declare-layout";
+import { ArrowRight, Sparkles, PackageX } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
-  // Banners set by the merchant in the portal. This never throws.
   const contentPromise = getStorefrontContent();
-  // The product sections (New Arrivals, Best Sellers, Trending Now, Featured). This never
-  // throws; null means the plain New Arrivals below is shown instead.
   const sectionsPromise = getHomeSections();
 
   let newArrivals: Product[] = [];
@@ -48,183 +46,133 @@ export default async function HomePage() {
   const hasHeroSlides = content.hero_slides.length > 0;
 
   return (
-    <div className="space-y-12 pb-10">
-      {/* Hero: the merchant's slides, or a simple welcome banner until there are some */}
+    <div className="min-h-screen">
+      {/* ══ Hero ══ */}
       {hasHeroSlides ? (
         <>
           <h1 className="sr-only">{STORE_NAME}</h1>
           <HeroSlider slides={content.hero_slides} />
         </>
       ) : (
-      <div className="border border-zinc-200 rounded-2xl p-8 sm:p-12 bg-gradient-to-br from-zinc-50 via-zinc-100/50 to-zinc-50 flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
-        <div className="space-y-3 max-w-xl">
-          <div className="inline-flex items-center gap-1.5 text-[11px] font-semibold tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-zinc-900 text-white">
-            <Sparkles size={12} />
-            <span>Official Storefront</span>
-          </div>
-          <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-zinc-900 uppercase">
-            {STORE_NAME}
-          </h1>
-          <p className="text-sm sm:text-base text-zinc-600">
-            Browse authentic products from {STORE_NAME}. Fast delivery across
-            Tunisia with cash on delivery.
-          </p>
-          <div className="pt-2">
-            <Link
-              href="/shop"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-zinc-900 text-white text-xs font-semibold hover:bg-zinc-800 transition shadow-sm"
-            >
-              <span>Explore Collection</span>
-              <ArrowRight size={14} />
-            </Link>
-          </div>
-        </div>
-
-        {/* Quick Category Badges in Hero */}
-        {categories.length > 0 && (
-          <div className="flex flex-wrap gap-2 max-w-md">
-            {categories.slice(0, 6).map((cat) => (
+        <section className="bg-hero pb-14 overflow-hidden border-b border-line">
+          <div className="max-w-[1240px] mx-auto px-6 pt-10 sm:pt-16">
+            <div className="max-w-xl py-4">
+              <p className="text-[11px] font-semibold tracking-[0.28em] uppercase text-ink mb-[18px]">
+                Official Storefront
+              </p>
+              <h1 className="font-serif text-[44px] sm:text-[54px] lg:text-[60px] font-medium leading-[1.12] tracking-[0.01em] text-ink mb-[26px]">
+                {STORE_NAME}
+              </h1>
+              <p className="text-[14.5px] leading-[1.75] text-aura-gray mb-[34px] max-w-md">
+                Browse authentic products from {STORE_NAME}. Fast delivery across
+                Tunisia with cash on delivery.
+              </p>
               <Link
-                key={cat.id}
-                href={`/c/${cleanCategoryHandle(cat.handle)}`}
-                className="text-xs font-medium px-3.5 py-2 rounded-lg bg-white border border-zinc-200 text-zinc-700 hover:border-zinc-900 hover:text-black transition shadow-2xs"
+                href="/shop"
+                className="inline-flex items-center gap-2.5 bg-ink text-white text-[11px] font-semibold tracking-[0.18em] uppercase px-[30px] py-[16px] hover:bg-[#3a352e] transition-colors group"
               >
-                <span>{cat.name}</span>
-                {cat.product_count > 0 && (
-                  <span className="ml-1.5 text-zinc-400 font-mono text-[11px]">
-                    {cat.product_count}
-                  </span>
-                )}
+                <span>SHOP NOW</span>
+                <ArrowRight className="w-[15px] h-[15px] group-hover:translate-x-1 transition-transform" />
               </Link>
-            ))}
-          </div>
-        )}
-      </div>
-
-      )}
-
-      {/* Categories with pictures, chosen by the merchant. Without any, the simple list below is shown. */}
-      <CategoryTiles tiles={content.category_tiles} />
-
-      {/* Simple category list: the fallback when the merchant has no category tiles */}
-      {content.category_tiles.length === 0 && categories.length > 0 && (
-        <section className="space-y-4">
-          <div className="flex items-center justify-between pb-3 border-b border-zinc-200">
-            <div className="flex items-center gap-2">
-              <LayoutGrid size={18} className="text-zinc-700" />
-              <h2 className="text-xl font-bold tracking-tight text-zinc-900">
-                Shop by Category
-              </h2>
             </div>
-            <Link
-              href="/shop"
-              className="text-xs font-medium text-zinc-600 hover:text-black transition"
-            >
-              View all &rarr;
-            </Link>
-          </div>
-
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-4">
-            {categories.map((cat) => (
-              <Link
-                key={cat.id}
-                href={`/c/${cleanCategoryHandle(cat.handle)}`}
-                className="group p-4 rounded-xl border border-zinc-200 bg-white hover:border-zinc-900 hover:shadow-xs transition flex flex-col justify-between"
-              >
-                <div>
-                  <h3 className="font-semibold text-xs sm:text-sm text-zinc-900 group-hover:text-black transition">
-                    {cat.name}
-                  </h3>
-                </div>
-                <div className="mt-3 text-[11px] font-mono text-zinc-400">
-                  {cat.product_count} {cat.product_count === 1 ? "item" : "items"}
-                </div>
-              </Link>
-            ))}
           </div>
         </section>
       )}
 
-      {/* Product sections chosen by the backend; without them the plain New Arrivals */}
+      {/* ══ Floating Category Strip ══ */}
+      <CategoryTiles tiles={content.category_tiles} />
+
+      {/* Fallback category strip when no category tiles are configured */}
+      {content.category_tiles.length === 0 && categories.length > 0 && (
+        <div className="max-w-[1240px] mx-auto px-6">
+          <div className="bg-white rounded-[6px] shadow-[0_14px_40px_rgba(60,50,35,0.09)] -mt-[34px] relative z-20 py-[26px] px-2 flex flex-wrap sm:flex-nowrap items-center border border-line/40">
+            {categories.slice(0, CATEGORY_TILE_PLACES).map((cat) => (
+              <Link
+                key={cat.id}
+                href={`/c/${cleanCategoryHandle(cat.handle)}`}
+                className="flex-1 basis-1/4 sm:basis-auto flex flex-col items-center gap-3 py-2 px-1 hover:opacity-55 transition-opacity group text-center"
+              >
+                <Sparkles className="w-[28px] h-[28px] text-ink stroke-[1.4]" />
+                <span className="text-[9.5px] font-bold tracking-[0.12em] uppercase text-ink">
+                  {cat.name}
+                </span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* ══ Product Rows (Featured, Best Sellers, New Arrivals) ══ */}
       {homeSections !== null &&
         homeSections.map((section) => (
           <ProductSection
             key={section.key}
+            sectionKey={section.key}
             title={section.title}
             subtitle={
-              section.key === "new_arrivals"
-                ? `Fresh additions to ${STORE_NAME}'s catalog`
+              section.key === "featured"
+                ? "CURATED SELECTION"
+                : section.key === "new_arrivals"
+                ? "JUST ARRIVED"
                 : undefined
             }
             products={section.products}
           />
         ))}
 
-      {/* New Arrivals Section (until the backend knows this storefront's sections) */}
+      {/* Fallback when backend sections are not configured */}
       {homeSections === null && (
-      <section className="space-y-6">
-        <div className="flex items-center justify-between pb-3 border-b border-zinc-200">
-          <div>
-            <h2 className="text-xl font-bold tracking-tight text-zinc-900">
-              New Arrivals
-            </h2>
-            <p className="text-xs text-zinc-500 mt-0.5">
-              Fresh additions to {STORE_NAME}&apos;s catalog
-            </p>
-          </div>
-          <Link
-            href="/shop"
-            className="text-xs font-semibold text-zinc-700 hover:text-black transition flex items-center gap-1"
-          >
-            <span>See all products</span>
-            <ArrowRight size={13} />
-          </Link>
-        </div>
+        <section className="py-16 bg-white border-b border-line">
+          <div className="max-w-[1240px] mx-auto px-6">
+            <div className="flex items-center justify-between mb-8">
+              <div>
+                <p className="text-[10px] font-semibold tracking-[0.2em] uppercase text-aura-gray mb-1">
+                  JUST ARRIVED
+                </p>
+                <h2 className="text-[17px] font-bold tracking-[0.12em] uppercase text-ink">
+                  NEW ARRIVALS
+                </h2>
+              </div>
+              <Link
+                href="/shop"
+                className="inline-flex items-center gap-2 text-[10.5px] font-semibold tracking-[0.16em] uppercase text-aura-gray hover:text-ink transition-colors group"
+              >
+                <span>VIEW ALL</span>
+                <ArrowRight className="w-[15px] h-[15px] group-hover:translate-x-1 transition-transform" />
+              </Link>
+            </div>
 
-        {/* Error State */}
-        {error && (
-          <div className="p-6 rounded-lg bg-rose-50 border border-rose-200 text-rose-800 text-sm">
-            <p className="font-semibold mb-1">Unable to load new arrivals</p>
-            <p className="text-xs text-rose-600">{error}</p>
-          </div>
-        )}
+            {error && (
+              <div className="p-6 rounded-lg bg-rose-50 border border-rose-200 text-rose-800 text-sm">
+                <p className="font-semibold mb-1">Unable to load new arrivals</p>
+                <p className="text-xs text-rose-600">{error}</p>
+              </div>
+            )}
 
-        {/* Empty State */}
-        {!error && newArrivals.length === 0 && (
-          <div className="text-center py-16 border border-dashed border-zinc-200 rounded-xl space-y-3">
-            <PackageX size={44} className="mx-auto text-zinc-400" />
-            <h3 className="text-base font-semibold text-zinc-800">
-              No products available
-            </h3>
-            <p className="text-xs text-zinc-500 max-w-sm mx-auto">
-              There are currently no products listed for {STORE_NAME}.
-            </p>
-          </div>
-        )}
+            {!error && newArrivals.length === 0 && (
+              <div className="text-center py-16 border border-dashed border-line rounded-xl space-y-3">
+                <PackageX size={44} className="mx-auto text-aura-gray" />
+                <h3 className="text-base font-semibold text-ink">
+                  No products available
+                </h3>
+                <p className="text-xs text-aura-gray max-w-sm mx-auto">
+                  There are currently no products listed for {STORE_NAME}.
+                </p>
+              </div>
+            )}
 
-        {/* 8 Newest Products Grid */}
-        {!error && newArrivals.length > 0 && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-            {newArrivals.map((prod) => (
-              <ProductCard key={prod.id} product={prod} />
-            ))}
+            {!error && newArrivals.length > 0 && (
+              <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                {newArrivals.map((prod) => (
+                  <ProductCard key={prod.id} product={prod} />
+                ))}
+              </div>
+            )}
           </div>
-        )}
-      </section>
+        </section>
       )}
 
-      {/* Shop All Products CTA Button */}
-      <div className="text-center">
-        <Link
-          href="/shop"
-          className="inline-flex items-center justify-center gap-2 px-8 py-3 rounded-lg bg-zinc-900 text-white text-xs sm:text-sm font-semibold hover:bg-zinc-800 transition shadow-sm"
-        >
-          <span>Shop all products</span>
-          <ArrowRight size={15} />
-        </Link>
-      </div>
-
-      {/* Promo banners set by the merchant */}
+      {/* ══ Promo Panels (The Ritual & Our Promise) ══ */}
       <PromoBanners banners={content.promo_banners} />
     </div>
   );

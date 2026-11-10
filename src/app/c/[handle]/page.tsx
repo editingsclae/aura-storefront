@@ -8,7 +8,6 @@ import {
   STORE_NAME,
 } from "@/lib/medusa";
 import { ShopClient } from "@/components/ShopClient";
-import { ChevronRight } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -47,48 +46,47 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   ]);
 
   return (
-    <div className="space-y-6">
-      {/* Breadcrumb */}
-      <nav className="flex items-center gap-2 text-xs text-zinc-500">
-        <Link href="/" className="hover:text-black transition">
-          {STORE_NAME}
-        </Link>
-        <ChevronRight size={14} />
-        <Link href="/shop" className="hover:text-black transition">
-          Shop
-        </Link>
-        <ChevronRight size={14} />
-        <span className="text-zinc-900 font-medium">{category.name}</span>
-      </nav>
-
-      {/* Category Header */}
-      <div className="border-b border-zinc-200 pb-5">
-        <div className="flex items-baseline justify-between gap-4">
-          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-zinc-900">
+    <div className="min-h-screen">
+      {/* ══ Hero ══ */}
+      <section className="bg-hero py-12 text-center border-b border-line/60">
+        <div className="max-w-[1240px] mx-auto px-6">
+          <p className="text-[10px] font-semibold tracking-[0.16em] uppercase text-aura-gray mb-3">
+            <Link href="/" className="hover:text-ink transition-colors">
+              HOME
+            </Link>{" "}
+            /{" "}
+            <Link href="/shop" className="hover:text-ink transition-colors">
+              SHOP
+            </Link>{" "}
+            / {category.name.toUpperCase()}
+          </p>
+          <h1 className="font-serif text-4xl sm:text-5xl font-medium text-ink mb-2">
             {category.name}
           </h1>
+          {category.description && (
+            <p className="text-xs sm:text-sm text-aura-gray max-w-xl mx-auto">
+              {category.description}
+            </p>
+          )}
         </div>
-        {category.description && (
-          <p className="text-sm text-zinc-600 mt-1 max-w-2xl">
-            {category.description}
-          </p>
-        )}
-      </div>
+      </section>
 
-      {/* Client Shop Component with Category Fixed */}
-      <Suspense
-        fallback={
-          <div className="py-20 text-center text-xs font-mono text-zinc-500">
-            Loading products...
-          </div>
-        }
-      >
-        <ShopClient
-          products={products}
-          categories={categories}
-          fixedCategory={category}
-        />
-      </Suspense>
+      {/* ══ Shop Content ══ */}
+      <div className="max-w-[1240px] mx-auto px-6 py-12">
+        <Suspense
+          fallback={
+            <div className="py-20 text-center text-xs font-mono text-aura-gray">
+              Loading products...
+            </div>
+          }
+        >
+          <ShopClient
+            products={products}
+            categories={categories}
+            fixedCategory={category}
+          />
+        </Suspense>
+      </div>
     </div>
   );
 }

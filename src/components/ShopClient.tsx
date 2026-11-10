@@ -64,8 +64,8 @@ export function ShopClient({
     <div className="space-y-6">
       {/* Search Input */}
       <div>
-        <label className="block text-xs font-semibold text-zinc-900 uppercase tracking-wider mb-2">
-          Search
+        <label className="block text-[10.5px] font-bold tracking-[0.14em] uppercase text-ink mb-2">
+          SEARCH
         </label>
         <div className="relative">
           <input
@@ -73,11 +73,11 @@ export function ShopClient({
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
             placeholder="Search products..."
-            className="w-full text-xs bg-zinc-50 border border-zinc-200 rounded-lg pl-8 pr-7 py-2 text-zinc-900 focus:outline-none focus:ring-1 focus:ring-zinc-900 focus:border-zinc-900"
+            className="w-full text-xs bg-white border border-line rounded px-3 py-2 pl-8 pr-7 text-ink focus:outline-none focus:border-ink"
           />
           <Search
             size={14}
-            className="absolute left-2.5 top-1/2 -translate-y-1/2 text-zinc-400"
+            className="absolute left-2.5 top-1/2 -translate-y-1/2 text-aura-gray"
           />
           {searchInput && (
             <button
@@ -85,7 +85,7 @@ export function ShopClient({
                 setSearchInput("");
                 updateParams({ q: null });
               }}
-              className="absolute right-2 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600 p-0.5"
+              className="absolute right-2 top-1/2 -translate-y-1/2 text-aura-gray hover:text-ink p-0.5 cursor-pointer"
               aria-label="Clear search"
             >
               <X size={12} />
@@ -96,11 +96,11 @@ export function ShopClient({
 
       {/* Categories (hidden on fixedCategory) */}
       {!fixedCategory && visibleCategories.length > 0 && (
-        <div className="border-t border-zinc-200 pt-5">
-          <label className="block text-xs font-semibold text-zinc-900 uppercase tracking-wider mb-3">
-            Categories
+        <div className="border-t border-[#f0ece5] pt-5">
+          <label className="block text-[10.5px] font-bold tracking-[0.14em] uppercase text-ink mb-3">
+            CATEGORIES
           </label>
-          <div className="space-y-2 max-h-52 overflow-y-auto pr-1">
+          <div className="space-y-2 max-h-56 overflow-y-auto pr-1">
             {visibleCategories.map((cat) => {
               const clean = cleanCategoryHandle(cat.handle).toLowerCase();
               const isChecked = activeCategoryHandles.includes(clean);
@@ -108,19 +108,19 @@ export function ShopClient({
               return (
                 <label
                   key={cat.id}
-                  className="flex items-center justify-between text-xs text-zinc-700 hover:text-zinc-900 cursor-pointer select-none"
+                  className="flex items-center justify-between text-xs text-ink/80 hover:text-ink cursor-pointer select-none"
                 >
                   <div className="flex items-center gap-2">
                     <input
                       type="checkbox"
                       checked={isChecked}
                       onChange={() => handleToggleCategory(cat.handle)}
-                      className="rounded border-zinc-300 text-zinc-900 focus:ring-zinc-900 h-3.5 w-3.5 cursor-pointer"
+                      className="rounded border-line text-ink focus:ring-ink h-3.5 w-3.5 cursor-pointer accent-[#1c1a17]"
                     />
-                    <span>{cat.name}</span>
+                    <span className="font-medium">{cat.name}</span>
                   </div>
-                  <span className="text-[11px] font-mono text-zinc-400">
-                    {count}
+                  <span className="text-[10px] font-mono text-aura-gray">
+                    ({count})
                   </span>
                 </label>
               );
@@ -130,9 +130,9 @@ export function ShopClient({
       )}
 
       {/* Price Range */}
-      <div className="border-t border-zinc-200 pt-5">
-        <label className="block text-xs font-semibold text-zinc-900 uppercase tracking-wider mb-2">
-          Price Range
+      <div className="border-t border-[#f0ece5] pt-5">
+        <label className="block text-[10.5px] font-bold tracking-[0.14em] uppercase text-ink mb-2">
+          PRICE RANGE
         </label>
         <div className="flex items-center gap-2">
           <div className="flex-1">
@@ -143,11 +143,11 @@ export function ShopClient({
               value={minInput}
               onChange={(e) => setMinInput(e.target.value)}
               placeholder={`${catalogMinPrice}`}
-              className="w-full text-xs bg-zinc-50 border border-zinc-200 rounded-lg px-2.5 py-1.5 text-zinc-900 focus:outline-none focus:ring-1 focus:ring-zinc-900"
+              className="w-full text-xs bg-white border border-line rounded px-2.5 py-1.5 text-ink focus:outline-none focus:border-ink font-mono"
               aria-label="Minimum price"
             />
           </div>
-          <span className="text-zinc-400 text-xs">-</span>
+          <span className="text-aura-gray text-xs">-</span>
           <div className="flex-1">
             <input
               type="number"
@@ -156,7 +156,7 @@ export function ShopClient({
               value={maxInput}
               onChange={(e) => setMaxInput(e.target.value)}
               placeholder={`${catalogMaxPrice}`}
-              className="w-full text-xs bg-zinc-50 border border-zinc-200 rounded-lg px-2.5 py-1.5 text-zinc-900 focus:outline-none focus:ring-1 focus:ring-zinc-900"
+              className="w-full text-xs bg-white border border-line rounded px-2.5 py-1.5 text-ink focus:outline-none focus:border-ink font-mono"
               aria-label="Maximum price"
             />
           </div>
@@ -164,10 +164,10 @@ export function ShopClient({
       </div>
 
       {/* In Stock Only */}
-      <div className="border-t border-zinc-200 pt-5">
-        <label className="flex items-center justify-between text-xs text-zinc-700 hover:text-zinc-900 cursor-pointer select-none">
-          <span className="font-semibold uppercase tracking-wider text-zinc-900">
-            In stock only
+      <div className="border-t border-[#f0ece5] pt-5">
+        <label className="flex items-center justify-between text-xs text-ink hover:text-ink/80 cursor-pointer select-none">
+          <span className="text-[10.5px] font-bold tracking-[0.14em] uppercase text-ink">
+            IN STOCK ONLY
           </span>
           <input
             type="checkbox"
@@ -175,7 +175,7 @@ export function ShopClient({
             onChange={(e) =>
               updateParams({ stock: e.target.checked ? "1" : null })
             }
-            className="rounded border-zinc-300 text-zinc-900 focus:ring-zinc-900 h-4 w-4 cursor-pointer"
+            className="rounded border-line text-ink focus:ring-ink h-4 w-4 cursor-pointer accent-[#1c1a17]"
           />
         </label>
       </div>
@@ -184,9 +184,9 @@ export function ShopClient({
       {catalogOptions.map((opt) => {
         const activeVals = activeOptionFilters.get(opt.title) || [];
         return (
-          <div key={opt.title} className="border-t border-zinc-200 pt-5">
-            <label className="block text-xs font-semibold text-zinc-900 uppercase tracking-wider mb-2.5">
-              {opt.title}
+          <div key={opt.title} className="border-t border-[#f0ece5] pt-5">
+            <label className="block text-[10.5px] font-bold tracking-[0.14em] uppercase text-ink mb-2.5">
+              {opt.title.toUpperCase()}
             </label>
             <div className="space-y-2 max-h-48 overflow-y-auto pr-1">
               {opt.values.map((val) => {
@@ -194,7 +194,7 @@ export function ShopClient({
                 return (
                   <label
                     key={val}
-                    className="flex items-center gap-2 text-xs text-zinc-700 hover:text-zinc-900 cursor-pointer select-none"
+                    className="flex items-center gap-2 text-xs text-ink/80 hover:text-ink cursor-pointer select-none"
                   >
                     <input
                       type="checkbox"
@@ -202,7 +202,7 @@ export function ShopClient({
                       onChange={() =>
                         handleToggleOptionValue(opt.title, opt.paramName, val)
                       }
-                      className="rounded border-zinc-300 text-zinc-900 focus:ring-zinc-900 h-3.5 w-3.5 cursor-pointer"
+                      className="rounded border-line text-ink focus:ring-ink h-3.5 w-3.5 cursor-pointer accent-[#1c1a17]"
                     />
                     <span>{val}</span>
                   </label>
@@ -215,11 +215,11 @@ export function ShopClient({
 
       {/* Clear All inside mobile sheet */}
       {isMobileSheet && hasActiveFilters && (
-        <div className="border-t border-zinc-200 pt-4">
+        <div className="border-t border-[#f0ece5] pt-4">
           <button
             type="button"
             onClick={handleClearAllFilters}
-            className="w-full flex items-center justify-center gap-1.5 py-2 text-xs font-medium text-zinc-600 hover:text-zinc-900 border border-zinc-200 rounded-lg hover:bg-zinc-50 transition"
+            className="w-full flex items-center justify-center gap-1.5 py-2.5 text-xs font-semibold text-aura-gray hover:text-ink border border-line rounded hover:bg-card transition cursor-pointer uppercase tracking-wider"
           >
             <RotateCcw size={13} />
             <span>Clear all filters</span>
@@ -236,19 +236,19 @@ export function ShopClient({
         <button
           type="button"
           onClick={() => setIsMobileFiltersOpen(true)}
-          className="flex items-center gap-2 px-3.5 py-2 text-xs font-medium text-zinc-800 bg-zinc-100 hover:bg-zinc-200 rounded-lg transition"
+          className="flex items-center gap-2 px-4 py-2 text-xs font-semibold uppercase tracking-wider text-ink bg-card border border-line rounded transition cursor-pointer"
         >
           <SlidersHorizontal size={14} />
           <span>Filters</span>
           {activeChips.length > 0 && (
-            <span className="w-5 h-5 rounded-full bg-zinc-900 text-white text-[10px] font-bold flex items-center justify-center">
+            <span className="w-5 h-5 rounded-full bg-ink text-white text-[10px] font-bold flex items-center justify-center">
               {activeChips.length}
             </span>
           )}
         </button>
 
         <div className="flex items-center gap-1.5">
-          <label htmlFor="mobile-sort" className="text-xs text-zinc-500">
+          <label htmlFor="mobile-sort" className="text-xs text-aura-gray uppercase tracking-wider font-semibold">
             Sort:
           </label>
           <select
@@ -259,7 +259,7 @@ export function ShopClient({
                 sort: e.target.value === "newest" ? null : e.target.value,
               })
             }
-            className="text-xs bg-zinc-50 border border-zinc-200 rounded-lg px-2.5 py-1.5 text-zinc-900 focus:outline-none focus:ring-1 focus:ring-zinc-900"
+            className="text-xs bg-white border border-line rounded px-2.5 py-1.5 text-ink focus:outline-none focus:border-ink font-semibold uppercase"
           >
             <option value="newest">Newest</option>
             <option value="price_asc">Price: Low to High</option>
@@ -269,19 +269,20 @@ export function ShopClient({
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
         {/* Desktop Left Sidebar */}
-        <aside className="hidden lg:block lg:col-span-1 bg-white p-5 rounded-xl border border-zinc-200 sticky top-24">
-          <div className="flex items-center justify-between pb-3 border-b border-zinc-200 mb-4">
-            <span className="text-sm font-bold text-zinc-900">Filters</span>
+        <aside className="hidden lg:block lg:col-span-3 bg-white p-6 rounded-md border border-line sticky top-24">
+          <div className="flex items-center justify-between pb-3 border-b border-[#f0ece5] mb-4">
+            <span className="text-[13px] font-bold tracking-[0.14em] uppercase text-ink">
+              Filters
+            </span>
             {hasActiveFilters && (
               <button
                 type="button"
                 onClick={handleClearAllFilters}
-                className="text-xs text-zinc-500 hover:text-zinc-900 flex items-center gap-1 transition"
+                className="text-[10.5px] font-semibold tracking-wider text-aura-gray hover:text-ink underline underline-offset-4 cursor-pointer"
               >
-                <RotateCcw size={12} />
-                <span>Clear all</span>
+                Clear all
               </button>
             )}
           </div>
@@ -289,11 +290,11 @@ export function ShopClient({
         </aside>
 
         {/* Main Products Grid Area */}
-        <div ref={resultsRef} className="lg:col-span-3 space-y-4 scroll-mt-28">
+        <div ref={resultsRef} className="lg:col-span-9 space-y-6 scroll-mt-28">
           {/* Desktop Top Header Bar: Counts, Chips, Sort */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-zinc-200">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-line">
             <div className="flex items-center gap-3">
-              <span className="text-xs font-mono text-zinc-600">
+              <span className="text-xs font-mono text-aura-gray">
                 {totalPages > 1
                   ? `${firstShown}\u2013${lastShown} of ${sortedProducts.length} products`
                   : `${sortedProducts.length} ${
@@ -304,16 +305,15 @@ export function ShopClient({
                 <button
                   type="button"
                   onClick={handleClearAllFilters}
-                  className="hidden sm:inline-flex text-xs text-zinc-500 hover:text-zinc-900 items-center gap-1 transition"
+                  className="hidden sm:inline-flex text-xs text-aura-gray hover:text-ink items-center gap-1 transition cursor-pointer underline underline-offset-4"
                 >
-                  <RotateCcw size={12} />
-                  <span>Clear all</span>
+                  Clear all
                 </button>
               )}
             </div>
 
             <div className="hidden lg:flex items-center gap-2">
-              <label htmlFor="desktop-sort" className="text-xs text-zinc-500">
+              <label htmlFor="desktop-sort" className="text-xs font-semibold tracking-wider uppercase text-aura-gray">
                 Sort:
               </label>
               <select
@@ -324,7 +324,7 @@ export function ShopClient({
                     sort: e.target.value === "newest" ? null : e.target.value,
                   })
                 }
-                className="text-xs bg-zinc-50 border border-zinc-200 rounded-lg px-2.5 py-1.5 text-zinc-900 focus:outline-none focus:ring-1 focus:ring-zinc-900"
+                className="text-xs bg-white border border-line rounded px-3 py-1.5 text-ink focus:outline-none focus:border-ink font-semibold uppercase tracking-wider cursor-pointer"
               >
                 <option value="newest">Newest</option>
                 <option value="price_asc">Price: Low to High</option>
@@ -340,13 +340,13 @@ export function ShopClient({
               {activeChips.map((chip) => (
                 <span
                   key={chip.id}
-                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-zinc-100 text-zinc-800 text-xs font-medium border border-zinc-200"
+                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-card text-ink text-xs font-medium border border-line"
                 >
                   <span>{chip.label}</span>
                   <button
                     type="button"
                     onClick={chip.onRemove}
-                    className="text-zinc-400 hover:text-zinc-700 transition"
+                    className="text-aura-gray hover:text-ink transition cursor-pointer"
                     aria-label={`Remove filter ${chip.label}`}
                   >
                     <X size={13} />
@@ -358,12 +358,12 @@ export function ShopClient({
 
           {/* Empty State */}
           {sortedProducts.length === 0 && (
-            <div className="text-center py-20 border border-dashed border-zinc-200 rounded-xl space-y-3 bg-zinc-50/50">
-              <PackageX size={44} className="mx-auto text-zinc-400" />
-              <h3 className="text-base font-semibold text-zinc-900">
+            <div className="text-center py-20 border border-dashed border-line rounded-xl space-y-3 bg-card/40">
+              <PackageX size={44} className="mx-auto text-aura-gray" />
+              <h3 className="text-base font-semibold text-ink">
                 No products found
               </h3>
-              <p className="text-xs text-zinc-500 max-w-sm mx-auto">
+              <p className="text-xs text-aura-gray max-w-sm mx-auto">
                 No items match your active filters. Try loosening your criteria or search term.
               </p>
               {hasActiveFilters && (
@@ -371,7 +371,7 @@ export function ShopClient({
                   <button
                     type="button"
                     onClick={handleClearAllFilters}
-                    className="inline-flex items-center gap-1.5 text-xs font-semibold px-4 py-2 rounded-lg bg-zinc-900 text-white hover:bg-zinc-800 transition"
+                    className="inline-flex items-center gap-1.5 text-xs font-semibold px-4 py-2 rounded bg-ink text-white hover:bg-[#3a352e] transition cursor-pointer uppercase tracking-wider"
                   >
                     <RotateCcw size={13} />
                     <span>Clear filters</span>
@@ -384,7 +384,7 @@ export function ShopClient({
           {/* Product Grid */}
           {sortedProducts.length > 0 && (
             <>
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {pageProducts.map((product) => (
                   <ProductCard key={product.id} product={product} />
                 ))}
@@ -415,14 +415,14 @@ export function ShopClient({
           />
 
           {/* Bottom Sheet Modal */}
-          <div className="fixed inset-x-0 bottom-0 max-h-[85vh] bg-white rounded-t-2xl shadow-2xl flex flex-col z-10 animate-in slide-in-from-bottom duration-200">
+          <div className="fixed inset-x-0 bottom-0 max-h-[85vh] bg-white rounded-t-2xl shadow-2xl flex flex-col z-10">
             {/* Header */}
-            <div className="flex items-center justify-between px-5 py-4 border-b border-zinc-200">
-              <span className="text-sm font-bold text-zinc-900">Filters</span>
+            <div className="flex items-center justify-between px-5 py-4 border-b border-line">
+              <span className="text-sm font-bold uppercase tracking-wider text-ink">Filters</span>
               <button
                 type="button"
                 onClick={() => setIsMobileFiltersOpen(false)}
-                className="p-1.5 text-zinc-400 hover:text-zinc-700 rounded-md transition"
+                className="p-1.5 text-aura-gray hover:text-ink rounded-md transition cursor-pointer"
                 aria-label="Close filters"
               >
                 <X size={18} />
@@ -435,11 +435,11 @@ export function ShopClient({
             </div>
 
             {/* Bottom Apply Action Button */}
-            <div className="p-4 border-t border-zinc-200 bg-white">
+            <div className="p-4 border-t border-line bg-white">
               <button
                 type="button"
                 onClick={() => setIsMobileFiltersOpen(false)}
-                className="w-full py-2.5 bg-zinc-900 hover:bg-zinc-800 text-white text-xs font-semibold rounded-lg transition flex items-center justify-center gap-2"
+                className="w-full py-3 bg-ink hover:bg-[#3a352e] text-white text-xs font-semibold rounded uppercase tracking-wider transition flex items-center justify-center gap-2 cursor-pointer"
               >
                 <Check size={14} />
                 <span>Apply ({sortedProducts.length} results)</span>

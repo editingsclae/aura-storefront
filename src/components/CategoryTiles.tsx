@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { LayoutGrid } from "lucide-react";
+import { Sparkles } from "lucide-react";
 import { CategoryTile, cleanCategoryHandle } from "@/logic";
 import { CATEGORY_TILE_PLACES } from "@/lib/declare-layout";
 
@@ -9,60 +9,38 @@ interface CategoryTilesProps {
   tiles: CategoryTile[];
 }
 
-// Up to CATEGORY_TILE_PLACES (8) categories with a round picture, chosen by the merchant in the
-// portal. Nothing shows when there are none: the home page then falls back to
-// its simple list of categories.
 export function CategoryTiles({ tiles: allTiles }: CategoryTilesProps) {
   const tiles = allTiles.slice(0, CATEGORY_TILE_PLACES);
   if (tiles.length === 0) return null;
 
   return (
-    <section aria-labelledby="shop-by-category" className="space-y-5">
-      <div className="flex items-center justify-between pb-3 border-b border-zinc-200">
-        <div className="flex items-center gap-2">
-          <LayoutGrid size={18} className="text-zinc-700" />
-          <h2
-            id="shop-by-category"
-            className="text-xl font-bold tracking-tight text-zinc-900"
-          >
-            Shop by Category
-          </h2>
-        </div>
-        <Link
-          href="/shop"
-          className="text-xs font-medium text-zinc-600 hover:text-black transition"
-        >
-          View all &rarr;
-        </Link>
-      </div>
-
-      {/* 4 per row on phones and tablets, one row from large screens */}
-      <ul
-        style={{ "--tile-count": tiles.length } as React.CSSProperties}
-        className="grid grid-cols-4 gap-x-3 gap-y-6 sm:gap-x-5 lg:[grid-template-columns:repeat(var(--tile-count),minmax(0,1fr))]"
-      >
+    <div className="max-w-[1240px] mx-auto px-6">
+      <div className="bg-white rounded-[6px] shadow-[0_14px_40px_rgba(60,50,35,0.09)] -mt-[34px] relative z-20 py-[26px] px-2 flex flex-wrap sm:flex-nowrap items-center border border-line/40">
         {tiles.map((tile) => (
-          <li key={tile.id}>
-            <Link
-              href={`/c/${cleanCategoryHandle(tile.handle)}`}
-              className="group flex flex-col items-center gap-2.5 text-center"
-            >
-              <span className="relative block aspect-square w-full max-w-[120px] overflow-hidden rounded-full bg-zinc-100 ring-1 ring-zinc-200 transition group-hover:ring-2 group-hover:ring-zinc-900 group-focus-visible:ring-2 group-focus-visible:ring-zinc-900">
+          <Link
+            key={tile.id}
+            href={`/c/${cleanCategoryHandle(tile.handle)}`}
+            className="flex-1 basis-1/4 sm:basis-auto flex flex-col items-center gap-3 py-2 px-1 hover:opacity-55 transition-opacity group text-center"
+          >
+            {tile.image_url ? (
+              <span className="relative block w-[30px] h-[30px] overflow-hidden rounded-full shrink-0">
                 <Image
                   src={tile.image_url}
                   alt=""
                   fill
-                  sizes="(max-width: 1024px) 25vw, 120px"
-                  className="object-cover transition duration-300 group-hover:scale-105"
+                  sizes="30px"
+                  className="object-cover"
                 />
               </span>
-              <span className="text-xs sm:text-sm font-medium text-zinc-800 group-hover:text-black leading-snug">
-                {tile.name}
-              </span>
-            </Link>
-          </li>
+            ) : (
+              <Sparkles className="w-[28px] h-[28px] text-ink stroke-[1.4]" />
+            )}
+            <span className="text-[9.5px] font-bold tracking-[0.12em] uppercase text-ink">
+              {tile.name}
+            </span>
+          </Link>
         ))}
-      </ul>
-    </section>
+      </div>
+    </div>
   );
 }

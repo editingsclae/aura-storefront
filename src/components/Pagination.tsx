@@ -9,10 +9,8 @@ interface PaginationProps {
 }
 
 const buttonBase =
-  "inline-flex items-center justify-center h-9 min-w-9 px-3 rounded-lg border text-xs font-semibold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-1";
+  "inline-flex items-center justify-center h-9 min-w-9 px-3 rounded border text-xs font-semibold transition focus:outline-none focus-visible:ring-1 focus-visible:ring-ink cursor-pointer";
 
-// Previous / numbered pages / Next. Nothing shows when everything fits on one
-// page. On phones the numbers are replaced by "Page 2 of 5".
 export function Pagination({ page, totalPages, onChange }: PaginationProps) {
   if (totalPages <= 1) return null;
 
@@ -23,20 +21,20 @@ export function Pagination({ page, totalPages, onChange }: PaginationProps) {
   return (
     <nav
       aria-label="Pagination"
-      className="flex items-center justify-center gap-2 pt-8 pb-4"
+      className="flex items-center justify-center gap-2 pt-10 pb-6"
     >
       <button
         type="button"
         onClick={() => onChange(page - 1)}
         disabled={isFirst}
         aria-label="Previous page"
-        className={`${buttonBase} gap-1 border-zinc-200 bg-white text-zinc-800 hover:border-zinc-900 disabled:opacity-40 disabled:hover:border-zinc-200 disabled:cursor-not-allowed`}
+        className={`${buttonBase} gap-1 border-line bg-white text-ink hover:border-ink disabled:opacity-30 disabled:hover:border-line disabled:cursor-not-allowed`}
       >
         <ChevronLeft size={14} />
-        <span className="hidden sm:inline">Previous</span>
+        <span className="hidden sm:inline">PREV</span>
       </button>
 
-      <span className="sm:hidden px-2 text-xs font-mono text-zinc-600">
+      <span className="sm:hidden px-2 text-xs font-mono text-aura-gray">
         Page {page} of {totalPages}
       </span>
 
@@ -51,15 +49,15 @@ export function Pagination({ page, totalPages, onChange }: PaginationProps) {
                 aria-current={item === page ? "page" : undefined}
                 className={`${buttonBase} ${
                   item === page
-                    ? "border-zinc-900 bg-zinc-900 text-white"
-                    : "border-zinc-200 bg-white text-zinc-800 hover:border-zinc-900"
+                    ? "border-ink bg-ink text-white"
+                    : "border-line bg-white text-ink hover:border-ink"
                 }`}
               >
                 {item}
               </button>
             </li>
           ) : (
-            <li key={item} aria-hidden="true" className="px-1 text-zinc-400">
+            <li key={item} aria-hidden="true" className="px-1 text-aura-gray">
               &hellip;
             </li>
           )
@@ -71,9 +69,9 @@ export function Pagination({ page, totalPages, onChange }: PaginationProps) {
         onClick={() => onChange(page + 1)}
         disabled={isLast}
         aria-label="Next page"
-        className={`${buttonBase} gap-1 border-zinc-200 bg-white text-zinc-800 hover:border-zinc-900 disabled:opacity-40 disabled:hover:border-zinc-200 disabled:cursor-not-allowed`}
+        className={`${buttonBase} gap-1 border-line bg-white text-ink hover:border-ink disabled:opacity-30 disabled:hover:border-line disabled:cursor-not-allowed`}
       >
-        <span className="hidden sm:inline">Next</span>
+        <span className="hidden sm:inline">NEXT</span>
         <ChevronRight size={14} />
       </button>
     </nav>
