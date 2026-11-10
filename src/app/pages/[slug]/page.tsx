@@ -1,7 +1,6 @@
 import React from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ChevronRight } from "lucide-react";
 import { RichBlocks } from "@/components/RichBlocks";
 import { STORE_NAME, getFooterPage, type RichBlock } from "@/lib/medusa";
 
@@ -17,16 +16,17 @@ export async function generateMetadata({ params }: SupportPageProps) {
   return { title: page ? `${page.title} | ${STORE_NAME}` : STORE_NAME };
 }
 
-// The merchant's text arrives as blocks (headings, paragraphs, lists, links),
-// drawn by React, never as HTML.
-
-// Merchants often start the text with the page's own title. The page already
-// shows it as its heading, so it is not repeated.
 function withoutRepeatedTitle(blocks: RichBlock[], title: string): RichBlock[] {
   const first = blocks[0];
   if (first && first.type === "heading") {
     const heading = first.content
-      .map((node) => (node.type === "text" ? node.text : node.type === "link" ? node.children.map((c) => c.text).join("") : " "))
+      .map((node) =>
+        node.type === "text"
+          ? node.text
+          : node.type === "link"
+          ? node.children.map((c) => c.text).join("")
+          : " "
+      )
       .join("")
       .replace(/[\s:]+$/, "")
       .trim()
@@ -47,18 +47,24 @@ export default async function SupportPage({ params }: SupportPageProps) {
   const blocks = withoutRepeatedTitle(page.blocks, page.title);
 
   return (
-    <article className="max-w-3xl mx-auto space-y-6">
-      <nav className="flex items-center gap-2 text-xs text-zinc-500">
-        <Link href="/" className="hover:text-black transition">
-          {STORE_NAME}
-        </Link>
-        <ChevronRight size={14} />
-        <span className="text-zinc-800">{page.title}</span>
+    <article className="max-w-[840px] mx-auto px-6 py-8 sm:py-12 min-h-screen space-y-8">
+      {/* ── Breadcrumb ── */}
+      <nav aria-label="Breadcrumb">
+        <p className="text-[10px] font-semibold tracking-[0.16em] uppercase text-aura-gray">
+          <Link href="/" className="hover:text-ink transition-colors">
+            HOME
+          </Link>{" "}
+          / <span className="text-ink">{page.title.toUpperCase()}</span>
+        </p>
       </nav>
-      <h1 className="text-2xl font-semibold tracking-tight text-zinc-900">
+
+      <h1 className="font-serif text-3xl sm:text-4xl font-medium text-ink pb-4 border-b border-line">
         {page.title}
       </h1>
-      <RichBlocks blocks={blocks} />
+
+      <div className="prose prose-zinc max-w-none text-xs sm:text-sm text-aura-gray leading-relaxed space-y-4">
+        <RichBlocks blocks={blocks} />
+      </div>
     </article>
   );
 }

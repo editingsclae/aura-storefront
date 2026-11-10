@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import EmailVerificationCard from "@/components/EmailVerificationCard";
 import {
@@ -13,8 +13,8 @@ import {
   LogOut,
   ChevronRight,
   ShoppingBag,
-  Clock,
   BadgeCheck,
+  User,
 } from "lucide-react";
 import { useAccountOrders } from "@/logic/use-account-orders";
 
@@ -29,11 +29,15 @@ export default function AccountPage() {
     handleLogout,
   } = useAccountOrders();
 
+  const [activeTab, setActiveTab] = useState<"orders" | "profile">("orders");
+
   if (authLoading || (!customer && authLoading)) {
     return (
-      <div className="py-16 text-center space-y-3">
-        <div className="w-8 h-8 border-2 border-zinc-900 border-t-transparent rounded-full animate-spin mx-auto" />
-        <p className="text-xs text-zinc-500 font-medium">Loading your account...</p>
+      <div className="py-24 text-center space-y-4">
+        <div className="w-8 h-8 border-2 border-ink border-t-transparent rounded-full animate-spin mx-auto" />
+        <p className="text-xs text-aura-gray font-medium tracking-wider uppercase">
+          Loading your account...
+        </p>
       </div>
     );
   }
@@ -42,144 +46,242 @@ export default function AccountPage() {
     return null;
   }
 
+  const initials = (
+    customer.first_name
+      ? `${customer.first_name[0]}${customer.last_name ? customer.last_name[0] : ""}`
+      : customer.email.slice(0, 2)
+  ).toUpperCase();
+
+  const fullName = customer.first_name
+    ? `${customer.first_name} ${customer.last_name || ""}`.trim()
+    : "Customer";
+
   return (
-    <div className="max-w-4xl mx-auto space-y-8">
-      {/* Account Overview Header */}
-      <div className="border border-zinc-200 rounded-2xl p-6 sm:p-8 bg-zinc-50 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
-        <div className="flex items-center gap-4">
-          <div className="w-14 h-14 rounded-full bg-zinc-900 text-white flex items-center justify-center text-xl font-bold uppercase shadow-sm">
-            {customer.first_name ? customer.first_name[0] : customer.email[0]}
-          </div>
-          <div>
-            <h1 className="text-xl sm:text-2xl font-extrabold text-zinc-900">
-              {customer.first_name
-                ? `${customer.first_name} ${customer.last_name || ""}`
-                : "Customer Profile"}
-            </h1>
-            <p className="text-xs text-zinc-500 font-mono mt-0.5">
-              {customer.email}
-            </p>
-            {emailVerified === true && (
-              <p className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-700 mt-1">
-                <BadgeCheck size={13} />
-                Email confirmed
-              </p>
-            )}
-          </div>
-        </div>
+    <main className="max-w-[1240px] mx-auto px-6 py-8 sm:py-12 min-h-screen">
+      {/* ── Breadcrumb ── */}
+      <p className="text-[10px] font-semibold tracking-[0.16em] uppercase text-aura-gray mb-6">
+        <Link href="/" className="hover:text-ink transition-colors">
+          HOME
+        </Link>{" "}
+        / MY ACCOUNT
+      </p>
 
-        <button
-          onClick={handleLogout}
-          className="inline-flex items-center gap-2 px-4 py-2 border border-zinc-300 rounded-md text-xs font-semibold text-zinc-700 bg-white hover:bg-zinc-100 hover:text-rose-600 transition self-start sm:self-auto"
-        >
-          <LogOut size={14} />
-          <span>Sign Out</span>
-        </button>
-      </div>
+      <h1 className="text-lg sm:text-xl font-bold tracking-[0.14em] uppercase text-ink mb-8">
+        MY ACCOUNT
+      </h1>
 
-      {/* Email confirmation: shown until the code was entered */}
-      {emailVerified === false && (
-        <EmailVerificationCard
-          email={customer.email}
-          onVerified={reloadOrders}
-        />
-      )}
-
-      {/* Orders Section */}
-      <div className="space-y-4">
-        <div className="flex items-center justify-between border-b border-zinc-200 pb-3">
-          <div className="flex items-center gap-2">
-            <Package size={18} className="text-zinc-700" />
-            <h2 className="text-lg font-bold text-zinc-900">My Orders</h2>
-          </div>
-          <span className="text-xs font-mono text-zinc-500">
-            {orders.length} {orders.length === 1 ? "order" : "orders"} placed at {STORE_NAME}
-          </span>
-        </div>
-
-        {/* Loading State */}
-        {ordersLoading && (
-          <div className="py-12 text-center text-xs text-zinc-500 space-y-2">
-            <div className="w-6 h-6 border-2 border-zinc-900 border-t-transparent rounded-full animate-spin mx-auto" />
-            <p>Fetching your orders from {STORE_NAME}...</p>
-          </div>
-        )}
-
-        {/* Empty State */}
-        {!ordersLoading && orders.length === 0 && (
-          <div className="text-center py-12 border border-dashed border-zinc-200 rounded-xl space-y-3">
-            <ShoppingBag size={40} className="mx-auto text-zinc-400" />
-            <h3 className="text-sm font-bold text-zinc-800">No orders yet</h3>
-            <p className="text-xs text-zinc-500 max-w-sm mx-auto">
-              You haven&apos;t placed any orders with {STORE_NAME} yet.
-            </p>
-            <div className="pt-2">
-              <Link
-                href="/"
-                className="inline-block text-xs font-semibold px-4 py-2 bg-zinc-900 text-white rounded-md hover:bg-black transition"
-              >
-                Browse Catalog
-              </Link>
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        {/* ── Sidebar ── */}
+        <aside className="lg:col-span-4 space-y-4 lg:sticky lg:top-24">
+          {/* Identity Card */}
+          <div className="bg-white border border-line rounded-md p-5 flex items-center gap-4">
+            <div className="w-12 h-12 rounded-full bg-ink text-white text-xs font-bold flex items-center justify-center shrink-0">
+              {initials}
+            </div>
+            <div className="min-w-0">
+              <b className="block text-sm font-bold text-ink uppercase truncate">
+                {fullName}
+              </b>
+              <span className="text-xs text-aura-gray truncate block font-mono">
+                {customer.email}
+              </span>
+              {emailVerified === true && (
+                <span className="inline-flex items-center gap-1 text-[10.5px] font-semibold text-emerald-800 mt-1">
+                  <BadgeCheck size={13} />
+                  Confirmed
+                </span>
+              )}
             </div>
           </div>
-        )}
 
-        {/* Orders List */}
-        {!ordersLoading && orders.length > 0 && (
-          <div className="space-y-3">
-            {orders.map((order) => {
-              const currency = order.currency_code || "TND";
-              return (
-                <div
-                  key={order.id}
-                  className="border border-zinc-200 rounded-xl p-5 bg-white hover:border-zinc-300 transition flex flex-col sm:flex-row sm:items-center justify-between gap-4"
-                >
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-2">
-                      <span className="font-mono font-bold text-sm text-zinc-900">
-                        Order #{order.display_id ?? order.id}
-                      </span>
-                      <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 uppercase">
-                        {getDerivedOrderStatus(order)}
-                      </span>
-                    </div>
+          {/* Navigation Links */}
+          <nav className="bg-white border border-line rounded-md p-2 flex flex-col space-y-1">
+            <button
+              type="button"
+              onClick={() => setActiveTab("orders")}
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded text-[11px] font-bold tracking-[0.12em] uppercase transition-colors text-left cursor-pointer ${
+                activeTab === "orders"
+                  ? "bg-ink text-white"
+                  : "text-ink hover:bg-card"
+              }`}
+            >
+              <Package className="w-4 h-4 stroke-[1.6]" />
+              <span className="flex-1">MY ORDERS</span>
+              <span
+                className={`text-[10px] px-2 py-0.5 rounded-full ${
+                  activeTab === "orders"
+                    ? "bg-white/20 text-white"
+                    : "bg-card text-aura-gray"
+                }`}
+              >
+                {orders.length}
+              </span>
+            </button>
 
-                    <div className="flex items-center gap-3 text-xs text-zinc-500">
-                      <span className="flex items-center gap-1">
-                        <Clock size={12} />
-                        {new Date(order.created_at).toLocaleDateString(undefined, {
-                          dateStyle: "medium",
-                        })}
-                      </span>
-                      <span>&bull;</span>
-                      <span>{order.items?.length || 0} item(s)</span>
-                    </div>
-                  </div>
+            <button
+              type="button"
+              onClick={() => setActiveTab("profile")}
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded text-[11px] font-bold tracking-[0.12em] uppercase transition-colors text-left cursor-pointer ${
+                activeTab === "profile"
+                  ? "bg-ink text-white"
+                  : "text-ink hover:bg-card"
+              }`}
+            >
+              <User className="w-4 h-4 stroke-[1.6]" />
+              <span>PROFILE DETAILS</span>
+            </button>
 
-                  <div className="flex items-center justify-between sm:justify-end gap-6 border-t sm:border-t-0 pt-3 sm:pt-0 border-zinc-100">
-                    <div className="text-right">
-                      <p className="text-[10px] uppercase tracking-wider text-zinc-400 font-bold">
-                        Total
-                      </p>
-                      <p className="font-mono font-bold text-base text-zinc-900">
-                        {formatPrice(order.total, currency)}
-                      </p>
-                    </div>
+            <button
+              type="button"
+              onClick={handleLogout}
+              className="w-full flex items-center gap-3 px-4 py-3 rounded text-[11px] font-bold tracking-[0.12em] uppercase text-aura-gray hover:text-rose-600 hover:bg-rose-50 transition-colors text-left cursor-pointer"
+            >
+              <LogOut className="w-4 h-4 stroke-[1.6]" />
+              <span>SIGN OUT</span>
+            </button>
+          </nav>
+        </aside>
 
+        {/* ── Main Panel Content ── */}
+        <section className="lg:col-span-8 space-y-6">
+          {/* Email verification card if unverified */}
+          {emailVerified === false && (
+            <EmailVerificationCard
+              email={customer.email}
+              onVerified={reloadOrders}
+            />
+          )}
+
+          {activeTab === "orders" && (
+            <div className="bg-white border border-line rounded-md p-6 sm:p-8 space-y-6">
+              <div className="flex items-center justify-between pb-4 border-b border-line">
+                <h2 className="text-[12.5px] font-bold tracking-[0.14em] uppercase text-ink">
+                  ORDER HISTORY
+                </h2>
+                <span className="text-xs font-mono text-aura-gray">
+                  {orders.length} {orders.length === 1 ? "order" : "orders"}
+                </span>
+              </div>
+
+              {ordersLoading && (
+                <div className="py-16 text-center text-xs text-aura-gray space-y-3">
+                  <div className="w-6 h-6 border-2 border-ink border-t-transparent rounded-full animate-spin mx-auto" />
+                  <p>Fetching your orders from {STORE_NAME}...</p>
+                </div>
+              )}
+
+              {!ordersLoading && orders.length === 0 && (
+                <div className="text-center py-16 border border-dashed border-line rounded-lg space-y-3 bg-card/30">
+                  <ShoppingBag size={40} className="mx-auto text-aura-gray stroke-[1.4]" />
+                  <h3 className="font-serif text-lg font-medium text-ink">
+                    No orders placed yet
+                  </h3>
+                  <p className="text-xs text-aura-gray max-w-sm mx-auto">
+                    You haven&apos;t placed any orders with {STORE_NAME} yet.
+                  </p>
+                  <div className="pt-2">
                     <Link
-                      href={`/account/orders/${order.id}`}
-                      className="inline-flex items-center gap-1 text-xs font-bold text-zinc-900 hover:text-zinc-600 transition bg-zinc-100 px-3 py-1.5 rounded-md"
+                      href="/shop"
+                      className="inline-flex items-center gap-2 text-[11px] font-semibold tracking-[0.18em] uppercase px-5 py-2.5 bg-ink text-white hover:bg-[#3a352e] transition-colors"
                     >
-                      <span>Details</span>
-                      <ChevronRight size={14} />
+                      <span>BROWSE CATALOG</span>
                     </Link>
                   </div>
                 </div>
-              );
-            })}
-          </div>
-        )}
+              )}
+
+              {!ordersLoading && orders.length > 0 && (
+                <div className="divide-y divide-line">
+                  {orders.map((order) => {
+                    const currency = order.currency_code || "TND";
+                    return (
+                      <div
+                        key={order.id}
+                        className="py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+                      >
+                        <div className="space-y-1">
+                          <div className="flex items-center gap-2">
+                            <span className="font-mono font-bold text-xs uppercase text-ink">
+                              Order #{order.display_id ?? order.id}
+                            </span>
+                            <span className="inline-flex items-center px-2 py-0.5 rounded bg-card border border-line text-[10px] font-semibold uppercase text-ink">
+                              {getDerivedOrderStatus(order)}
+                            </span>
+                          </div>
+                          <p className="text-xs text-aura-gray">
+                            Placed on{" "}
+                            {new Date(order.created_at).toLocaleDateString(
+                              undefined,
+                              { dateStyle: "medium" }
+                            )}{" "}
+                            &bull; {order.items?.length || 0}{" "}
+                            {order.items?.length === 1 ? "item" : "items"}
+                          </p>
+                        </div>
+
+                        <div className="flex items-center justify-between sm:justify-end gap-4">
+                          <span className="font-mono font-bold text-sm text-ink">
+                            {formatPrice(order.total, currency)}
+                          </span>
+                          <Link
+                            href={`/account/orders/${order.id}`}
+                            className="inline-flex items-center gap-1 text-[11px] font-semibold tracking-wider uppercase text-aura-gray hover:text-ink transition-colors border border-line rounded px-3 py-1.5"
+                          >
+                            <span>DETAILS</span>
+                            <ChevronRight size={14} />
+                          </Link>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          )}
+
+          {activeTab === "profile" && (
+            <div className="bg-white border border-line rounded-md p-6 sm:p-8 space-y-6">
+              <h2 className="text-[12.5px] font-bold tracking-[0.14em] uppercase text-ink pb-4 border-b border-line">
+                PROFILE DETAILS
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-xs">
+                <div>
+                  <span className="block text-[9.5px] font-bold tracking-[0.14em] uppercase text-aura-gray mb-1">
+                    FULL NAME
+                  </span>
+                  <p className="font-semibold text-ink text-sm uppercase">
+                    {fullName}
+                  </p>
+                </div>
+                <div>
+                  <span className="block text-[9.5px] font-bold tracking-[0.14em] uppercase text-aura-gray mb-1">
+                    EMAIL ADDRESS
+                  </span>
+                  <p className="font-mono text-ink text-sm">
+                    {customer.email}
+                  </p>
+                </div>
+                <div>
+                  <span className="block text-[9.5px] font-bold tracking-[0.14em] uppercase text-aura-gray mb-1">
+                    PHONE
+                  </span>
+                  <p className="font-mono text-ink text-sm">
+                    {customer.phone || "Not provided"}
+                  </p>
+                </div>
+                <div>
+                  <span className="block text-[9.5px] font-bold tracking-[0.14em] uppercase text-aura-gray mb-1">
+                    STATUS
+                  </span>
+                  <p className="font-semibold text-ink text-sm">
+                    {emailVerified ? "Verified Account" : "Unverified Email"}
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+        </section>
       </div>
-    </div>
+    </main>
   );
 }

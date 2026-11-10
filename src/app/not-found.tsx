@@ -5,36 +5,38 @@ import { PackageX, ArrowLeft, ShoppingBag } from "lucide-react";
 
 export default function NotFound() {
   return (
-    <div className="py-24 text-center max-w-md mx-auto space-y-5">
-      <PackageX size={56} className="mx-auto text-zinc-400" />
-      <div className="space-y-1.5">
-        <span className="text-xs font-semibold uppercase tracking-wider text-zinc-400">
-          404 Error &bull; {STORE_NAME}
-        </span>
-        <h1 className="text-2xl font-extrabold text-zinc-900 tracking-tight">
-          Page not found
-        </h1>
-        <p className="text-xs text-zinc-500">
-          The page you are looking for does not exist or may have been moved.
-        </p>
-      </div>
+    <main className="max-w-[1240px] mx-auto px-6 py-24 text-center">
+      <div className="max-w-md mx-auto py-16 px-6 border border-dashed border-line rounded-xl space-y-5 bg-card/30">
+        <PackageX size={52} className="mx-auto text-aura-gray stroke-[1.4]" />
+        <div className="space-y-2">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-aura-gray">
+            404 NOT FOUND &bull; {STORE_NAME}
+          </p>
+          <h1 className="font-serif text-3xl sm:text-4xl font-medium text-ink">
+            Page Not Found
+          </h1>
+          <p className="text-xs text-aura-gray">
+            The page you are looking for does not exist or may have been moved.
+          </p>
+        </div>
 
-      <div className="flex items-center justify-center gap-3 pt-3">
-        <Link
-          href="/"
-          className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold rounded-lg bg-zinc-100 hover:bg-zinc-200 text-zinc-800 transition"
-        >
-          <ArrowLeft size={13} />
-          <span>Back to Home</span>
-        </Link>
-        <Link
-          href="/shop"
-          className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold rounded-lg bg-zinc-900 hover:bg-zinc-800 text-white transition shadow-sm"
-        >
-          <ShoppingBag size={13} />
-          <span>Browse Shop</span>
-        </Link>
+        <div className="flex items-center justify-center gap-3 pt-3">
+          <Link
+            href="/"
+            className="inline-flex items-center gap-1.5 px-5 py-3 text-[11px] font-semibold tracking-wider uppercase rounded border border-line bg-white hover:border-ink text-ink transition-colors"
+          >
+            <ArrowLeft size={13} />
+            <span>HOME</span>
+          </Link>
+          <Link
+            href="/shop"
+            className="inline-flex items-center gap-1.5 px-5 py-3 text-[11px] font-semibold tracking-wider uppercase rounded bg-ink hover:bg-[#3a352e] text-white transition-colors shadow-xs"
+          >
+            <ShoppingBag size={13} />
+            <span>BROWSE SHOP</span>
+          </Link>
+        </div>
       </div>
-    </div>
+    </main>
   );
 }

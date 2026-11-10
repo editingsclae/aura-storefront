@@ -7,14 +7,9 @@ import { useEmailVerificationCard } from "@/logic/use-email-verification";
 
 interface Props {
   email: string;
-  // Called after the code was accepted and the orders were linked
   onVerified?: () => void;
 }
 
-// Asks the shopper to type the 6 digit code that was emailed. Shown while the
-// email is not confirmed. Shopping is never blocked: an unconfirmed account can
-// still place orders. Confirming links the orders placed as a guest with the
-// same email to the account.
 export default function EmailVerificationCard({ email, onVerified }: Props) {
   const {
     code,
@@ -32,17 +27,18 @@ export default function EmailVerificationCard({ email, onVerified }: Props) {
   } = useEmailVerificationCard({ email, onVerified });
 
   return (
-    <div className="border border-amber-200 bg-amber-50 rounded-2xl p-5 sm:p-6 space-y-4">
-      <div className="flex items-start gap-3">
-        <MailCheck size={20} className="text-amber-700 mt-0.5 shrink-0" />
+    <div className="border border-line bg-card rounded-md p-6 space-y-4">
+      <div className="flex items-start gap-3.5">
+        <MailCheck size={20} className="text-ink mt-0.5 shrink-0 stroke-[1.5]" />
         <div className="space-y-1">
-          <h2 className="text-sm font-bold text-zinc-900">Confirm your email</h2>
-          <p className="text-xs text-zinc-600 leading-relaxed">
+          <h2 className="text-[12px] font-bold tracking-[0.12em] uppercase text-ink">
+            Confirm your email
+          </h2>
+          <p className="text-xs text-aura-gray leading-relaxed">
             {codeSent
-              ? `Enter the ${CODE_LENGTH} digit code we sent to ${email}.`
+              ? `Enter the ${CODE_LENGTH} digit code sent to ${email}.`
               : `We will email a ${CODE_LENGTH} digit code to ${email}.`}{" "}
-            You can keep shopping without it. Confirming links your earlier
-            guest orders to this account.
+            You can keep browsing without it. Confirming links your earlier guest orders to this account.
           </p>
         </div>
       </div>
@@ -57,20 +53,20 @@ export default function EmailVerificationCard({ email, onVerified }: Props) {
           maxLength={CODE_LENGTH + 4}
           placeholder="123456"
           aria-label={`${CODE_LENGTH} digit confirmation code`}
-          className="w-full sm:w-44 px-3 py-2 border border-zinc-300 rounded-md bg-white text-center font-mono text-lg tracking-[0.35em] text-zinc-900 focus:outline-none focus:border-zinc-900"
+          className="w-full sm:w-44 px-3 py-2 border border-line rounded bg-white text-center font-mono text-base tracking-[0.35em] text-ink focus:outline-none focus:border-ink"
         />
         <button
           type="submit"
           disabled={busy !== null || !isComplete}
-          className="px-4 py-2 rounded-md bg-zinc-900 text-white text-xs font-semibold hover:bg-black transition disabled:opacity-50 disabled:cursor-not-allowed"
+          className="px-5 py-2.5 rounded bg-ink text-white text-[11px] font-semibold tracking-[0.16em] uppercase hover:bg-[#3a352e] transition disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
         >
-          {busy === "confirm" ? "Checking..." : "Confirm"}
+          {busy === "confirm" ? "CHECKING..." : "CONFIRM"}
         </button>
         <button
           type="button"
           onClick={send}
           disabled={busy !== null || wait > 0}
-          className="px-4 py-2 rounded-md border border-zinc-300 bg-white text-xs font-semibold text-zinc-700 hover:bg-zinc-100 transition disabled:opacity-50 disabled:cursor-not-allowed"
+          className="px-4 py-2.5 rounded border border-line bg-white text-[11px] font-semibold tracking-[0.14em] uppercase text-ink hover:border-ink transition disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
         >
           {resendButtonLabel}
         </button>
@@ -83,13 +79,13 @@ export default function EmailVerificationCard({ email, onVerified }: Props) {
         </p>
       )}
       {notice && !error && (
-        <p role="status" className="flex items-start gap-2 text-xs text-emerald-700">
+        <p role="status" className="flex items-start gap-2 text-xs text-emerald-800">
           <CheckCircle2 size={14} className="mt-0.5 shrink-0" />
           <span>{notice}</span>
         </p>
       )}
-      <p className="text-[11px] text-zinc-500">
-        Nothing in your inbox? Check the spam folder, then ask for a new code.
+      <p className="text-[11px] text-aura-gray">
+        Nothing in your inbox? Check the spam folder, then request a new code.
       </p>
     </div>
   );

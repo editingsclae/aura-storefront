@@ -15,42 +15,47 @@ export default function ErrorPage({ error, reset }: ErrorProps) {
   }, [error]);
 
   return (
-    <div className="py-24 text-center max-w-md mx-auto space-y-5">
-      <div className="w-14 h-14 mx-auto rounded-full bg-rose-50 border border-rose-200 flex items-center justify-center text-rose-600">
-        <AlertCircle size={28} />
-      </div>
+    <main className="max-w-[1240px] mx-auto px-6 py-24 text-center">
+      <div className="max-w-md mx-auto py-16 px-6 border border-dashed border-line rounded-xl space-y-5 bg-card/30">
+        <div className="w-14 h-14 mx-auto rounded-full bg-rose-50 border border-rose-200 flex items-center justify-center text-rose-600">
+          <AlertCircle size={26} />
+        </div>
 
-      <div className="space-y-1.5">
-        <h1 className="text-2xl font-extrabold text-zinc-900 tracking-tight">
-          Something went wrong
-        </h1>
-        <p className="text-xs text-zinc-500">
-          An unexpected error occurred while loading this page. Please try again.
-        </p>
-        {error.digest && (
-          <p className="text-[11px] font-mono text-zinc-400">
-            Error digest: {error.digest}
+        <div className="space-y-2">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-aura-gray">
+            APPLICATION ERROR
           </p>
-        )}
-      </div>
+          <h1 className="font-serif text-3xl sm:text-4xl font-medium text-ink">
+            Something Went Wrong
+          </h1>
+          <p className="text-xs text-aura-gray">
+            An unexpected error occurred while loading this page. Please try again.
+          </p>
+          {error.digest && (
+            <p className="text-[10px] font-mono text-aura-gray">
+              Digest: {error.digest}
+            </p>
+          )}
+        </div>
 
-      <div className="flex items-center justify-center gap-3 pt-3">
-        <button
-          type="button"
-          onClick={() => reset()}
-          className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold rounded-lg bg-zinc-900 hover:bg-zinc-800 text-white transition shadow-sm cursor-pointer"
-        >
-          <RotateCcw size={13} />
-          <span>Try again</span>
-        </button>
-        <Link
-          href="/"
-          className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold rounded-lg bg-zinc-100 hover:bg-zinc-200 text-zinc-800 transition"
-        >
-          <Home size={13} />
-          <span>Back to Home</span>
-        </Link>
+        <div className="flex items-center justify-center gap-3 pt-3">
+          <button
+            type="button"
+            onClick={() => reset()}
+            className="inline-flex items-center gap-1.5 px-5 py-3 text-[11px] font-semibold tracking-wider uppercase rounded bg-ink hover:bg-[#3a352e] text-white transition-colors shadow-xs cursor-pointer"
+          >
+            <RotateCcw size={13} />
+            <span>TRY AGAIN</span>
+          </button>
+          <Link
+            href="/"
+            className="inline-flex items-center gap-1.5 px-5 py-3 text-[11px] font-semibold tracking-wider uppercase rounded border border-line bg-white hover:border-ink text-ink transition-colors"
+          >
+            <Home size={13} />
+            <span>HOME</span>
+          </Link>
+        </div>
       </div>
-    </div>
+    </main>
   );
 }

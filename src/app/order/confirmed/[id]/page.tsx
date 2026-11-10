@@ -1,6 +1,6 @@
 import React from "react";
-import { showVariantTitle, getOrderTotals } from "@/logic";
 import Link from "next/link";
+import { showVariantTitle, getOrderTotals } from "@/logic";
 import {
   getOrder,
   formatPrice,
@@ -8,7 +8,7 @@ import {
   getDerivedOrderStatus,
   getDerivedPaymentStatus,
 } from "@/lib/medusa";
-import { CheckCircle2, PackageCheck, ArrowRight, ShoppingBag } from "lucide-react";
+import { CheckCircle2, PackageCheck, ArrowRight } from "lucide-react";
 import { ClearCartOnMount } from "./ClearCartOnMount";
 
 export const dynamic = "force-dynamic";
@@ -25,18 +25,22 @@ export default async function OrderConfirmedPage({
 
   if (!order) {
     return (
-      <div className="max-w-md mx-auto py-16 text-center space-y-4">
-        <h1 className="text-xl font-bold text-zinc-900">Order Not Found</h1>
-        <p className="text-xs text-zinc-500">
-          The requested order ({id}) could not be retrieved for this merchant.
-        </p>
-        <Link
-          href="/"
-          className="inline-block text-xs font-semibold px-4 py-2 rounded-md bg-zinc-900 text-white"
-        >
-          Return to Store
-        </Link>
-      </div>
+      <main className="max-w-[1240px] mx-auto px-6 py-20 text-center">
+        <div className="max-w-md mx-auto py-16 px-6 border border-dashed border-line rounded-xl space-y-4 bg-card/30">
+          <h1 className="font-serif text-2xl font-medium text-ink">Order Not Found</h1>
+          <p className="text-xs text-aura-gray">
+            The requested order could not be retrieved.
+          </p>
+          <div className="pt-2">
+            <Link
+              href="/"
+              className="inline-flex items-center gap-2 text-[11px] font-semibold tracking-[0.18em] uppercase px-6 py-3 bg-ink text-white hover:bg-[#3a352e] transition-colors"
+            >
+              <span>RETURN TO STORE</span>
+            </Link>
+          </div>
+        </div>
+      </main>
     );
   }
 
@@ -45,68 +49,79 @@ export default async function OrderConfirmedPage({
   const currencyCode = totals.currency;
 
   return (
-    <div className="max-w-3xl mx-auto space-y-8 py-4">
+    <main className="max-w-[760px] mx-auto px-6 py-12 sm:py-20 min-h-screen space-y-8">
       <ClearCartOnMount orderId={order.id} />
-      {/* Success Hero Header */}
-      <div className="border border-emerald-200 bg-emerald-50/50 rounded-2xl p-8 text-center space-y-3">
-        <CheckCircle2 size={52} className="mx-auto text-emerald-600" />
-        <h1 className="text-2xl sm:text-3xl font-extrabold text-zinc-900 tracking-tight">
-          Thank you for your order!
-        </h1>
-        <p className="text-sm text-zinc-600 max-w-md mx-auto">
-          Your order has been received and confirmed by <strong>{STORE_NAME}</strong>. We will notify you once your package ships.
-        </p>
-        <div className="pt-2 inline-flex items-center gap-2 bg-white px-3 py-1.5 rounded-full border border-zinc-200 text-xs font-mono text-zinc-700">
-          <span>Order:</span>
-          <strong>#{order.display_id ?? order.id}</strong>
+
+      {/* ── Success Card ── */}
+      <div className="bg-white border border-line rounded-md p-8 sm:p-12 text-center space-y-6">
+        <div className="w-14 h-14 rounded-full bg-ink text-white flex items-center justify-center mx-auto">
+          <CheckCircle2 className="w-8 h-8 stroke-[2]" />
+        </div>
+
+        <div>
+          <p className="text-[10px] font-semibold tracking-[0.2em] uppercase text-aura-gray mb-2">
+            ORDER CONFIRMED
+          </p>
+          <h1 className="font-serif text-3xl sm:text-4xl font-medium text-ink">
+            Thank you for your order!
+          </h1>
+          <p className="text-xs sm:text-sm text-aura-gray mt-2 max-w-md mx-auto">
+            Your order has been received and confirmed by <strong className="text-ink">{STORE_NAME}</strong>. Pay the courier in cash upon arrival.
+          </p>
+        </div>
+
+        <div className="inline-block border border-line bg-soft rounded px-4 py-2 text-xs font-mono font-semibold text-ink">
+          Order #{order.display_id ?? order.id}
         </div>
       </div>
 
-      {/* Order Details Card */}
-      <div className="border border-zinc-200 rounded-xl overflow-hidden bg-white">
-        <div className="bg-zinc-50 p-4 border-b border-zinc-200 flex flex-wrap items-center justify-between gap-2 text-xs">
+      {/* ── Order Details Card ── */}
+      <div className="border border-line rounded-md overflow-hidden bg-white">
+        <div className="bg-soft p-5 border-b border-line flex flex-wrap items-center justify-between gap-3 text-xs">
           <div>
-            <span className="text-zinc-500">Placed on: </span>
-            <span className="font-semibold text-zinc-900">
+            <span className="text-aura-gray">Placed on: </span>
+            <span className="font-bold text-ink">
               {new Date(order.created_at).toLocaleDateString(undefined, {
                 dateStyle: "medium",
               })}
             </span>
           </div>
           <div>
-            <span className="text-zinc-500">Confirmation sent to: </span>
-            <span className="font-semibold text-zinc-900">{order.email}</span>
+            <span className="text-aura-gray">Confirmation to: </span>
+            <span className="font-bold text-ink">{order.email}</span>
           </div>
           <div>
-            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-semibold uppercase text-[10px]">
+            <span className="inline-flex items-center px-2.5 py-1 rounded bg-white border border-line text-ink font-semibold uppercase text-[10px] tracking-wider">
               {getDerivedOrderStatus(order)}
             </span>
           </div>
         </div>
 
-        <div className="p-6 space-y-6">
-          {/* Items List */}
+        <div className="p-6 sm:p-8 space-y-6">
+          {/* Ordered Items */}
           <div>
-            <h2 className="text-xs font-bold uppercase tracking-wider text-zinc-700 mb-3 flex items-center gap-1.5">
+            <h2 className="text-[11px] font-bold uppercase tracking-[0.14em] text-ink mb-4 flex items-center gap-2">
               <PackageCheck size={16} />
-              <span>Ordered Items</span>
+              <span>ORDERED ITEMS ({items.length})</span>
             </h2>
-            <div className="divide-y divide-zinc-100 border-y border-zinc-100">
+            <div className="divide-y divide-line border-y border-line">
               {items.map((item) => (
                 <div
                   key={item.id}
-                  className="py-3 flex items-center justify-between text-sm"
+                  className="py-3.5 flex items-center justify-between text-xs"
                 >
                   <div>
-                    <p className="font-semibold text-zinc-900">{item.title}</p>
+                    <p className="font-bold uppercase text-ink">{item.title}</p>
                     {showVariantTitle(item.variant_title) && (
-                      <p className="text-xs text-zinc-500">{item.variant_title}</p>
+                      <p className="text-[10px] text-aura-gray font-medium uppercase mt-0.5">
+                        {item.variant_title}
+                      </p>
                     )}
-                    <p className="text-xs text-zinc-500">
-                      Qty: {item.quantity} &bull; Unit: {formatPrice(item.unit_price, currencyCode)}
+                    <p className="text-aura-gray font-mono mt-0.5">
+                      Qty: {item.quantity} &times; {formatPrice(item.unit_price, currencyCode)}
                     </p>
                   </div>
-                  <div className="font-mono font-semibold text-zinc-900">
+                  <div className="font-mono font-bold text-ink">
                     {formatPrice(item.total || item.unit_price * item.quantity, currencyCode)}
                   </div>
                 </div>
@@ -114,98 +129,98 @@ export default async function OrderConfirmedPage({
             </div>
           </div>
 
-          {/* Shipping Address & Method */}
+          {/* Shipping & Payment Info */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-2 text-xs">
             <div>
-              <h3 className="font-bold uppercase tracking-wider text-zinc-700 mb-1">
-                Shipping Destination
+              <h3 className="font-bold uppercase tracking-[0.14em] text-ink mb-2">
+                SHIPPING DESTINATION
               </h3>
               {order.shipping_address ? (
-                <div className="text-zinc-600 space-y-0.5">
-                  <p className="font-semibold text-zinc-900">
+                <div className="text-aura-gray space-y-1">
+                  <p className="font-bold text-ink">
                     {order.shipping_address.first_name} {order.shipping_address.last_name}
                   </p>
                   <p>{order.shipping_address.address_1}</p>
                   <p>
                     {order.shipping_address.city}, {order.shipping_address.postal_code}
                   </p>
-                  <p>{order.shipping_address.phone}</p>
+                  <p className="text-ink font-medium">{order.shipping_address.phone}</p>
                 </div>
               ) : (
-                <p className="text-zinc-400">Standard address</p>
+                <p className="text-aura-gray">Standard delivery</p>
               )}
             </div>
 
             <div>
-              <h3 className="font-bold uppercase tracking-wider text-zinc-700 mb-1">
-                Fulfillment & Delivery
+              <h3 className="font-bold uppercase tracking-[0.14em] text-ink mb-2">
+                PAYMENT DETAILS
               </h3>
-              <div className="text-zinc-600 space-y-0.5">
-                <p className="font-semibold text-zinc-900">
-                  {order.shipping_methods?.[0]?.name || "Aramex Standard Delivery"}
-                </p>
-                <p>Status: {getDerivedOrderStatus(order)}</p>
-                <p>{getDerivedPaymentStatus(order)}</p>
-                <p className="text-zinc-500 text-[11px]">Pay when you receive your order</p>
+              <div className="text-aura-gray space-y-1">
+                <p className="font-bold text-ink">Cash on delivery</p>
+                <p>Status: {getDerivedPaymentStatus(order)}</p>
+                <p>Payment on package delivery across Tunisia.</p>
               </div>
             </div>
           </div>
 
-          {/* Total Breakdown */}
-          <div className="pt-4 border-t border-zinc-200 space-y-2 text-xs">
-            {totals.itemsSubtotal !== undefined && (
-              <div className="flex justify-between text-zinc-600">
-                <span>Items</span>
-                <span className="font-mono">
-                  {formatPrice(totals.itemsSubtotal, currencyCode)}
-                </span>
-              </div>
-            )}
-            {totals.shippingSubtotal !== undefined && (
-              <div className="flex justify-between text-zinc-600">
-                <span>Shipping</span>
-                <span className="font-mono">
-                  {totals.isShippingFree
-                    ? "Free"
-                    : formatPrice(totals.shippingSubtotal, currencyCode)}
-                </span>
-              </div>
-            )}
-            {totals.hasTaxTotal && (
-              <div className="flex justify-between text-zinc-600">
+          {/* Totals Summary */}
+          <div className="pt-4 border-t border-line space-y-2 text-xs">
+            <div className="flex justify-between text-aura-gray">
+              <span>Items Subtotal</span>
+              <span className="font-mono font-semibold text-ink">
+                {totals.itemsSubtotal !== undefined
+                  ? formatPrice(totals.itemsSubtotal, currencyCode)
+                  : "-"}
+              </span>
+            </div>
+
+            <div className="flex justify-between text-aura-gray">
+              <span>Shipping</span>
+              <span className="font-mono font-semibold text-ink">
+                {totals.shippingSubtotal !== undefined
+                  ? formatPrice(totals.shippingSubtotal, currencyCode)
+                  : "-"}
+              </span>
+            </div>
+
+            {totals.hasTaxTotal && totals.taxTotal !== undefined && (
+              <div className="flex justify-between text-aura-gray">
                 <span>VAT</span>
-                <span className="font-mono">
-                  {formatPrice(totals.taxTotal!, currencyCode)}
+                <span className="font-mono font-semibold text-ink">
+                  {formatPrice(totals.taxTotal, currencyCode)}
                 </span>
               </div>
             )}
-            {totals.total !== undefined && (
-              <div className="flex justify-between text-base font-extrabold text-zinc-900 pt-2 border-t border-zinc-200">
-                <span>Total</span>
-                <span className="font-mono">{formatPrice(totals.total, currencyCode)}</span>
-              </div>
-            )}
+
+            <div className="pt-3 border-t-2 border-ink flex justify-between items-baseline text-ink">
+              <span className="text-xs font-bold tracking-[0.12em] uppercase">
+                TOTAL
+              </span>
+              <span className="text-xl font-bold font-mono">
+                {totals.total !== undefined
+                  ? formatPrice(totals.total, currencyCode)
+                  : "-"}
+              </span>
+            </div>
+          </div>
+
+          <div className="pt-4 flex flex-col sm:flex-row gap-3 justify-center">
+            <Link
+              href="/shop"
+              className="inline-flex items-center justify-center gap-2 py-3 px-6 bg-ink text-white text-[11px] font-semibold tracking-[0.18em] uppercase hover:bg-[#3a352e] transition-colors"
+            >
+              <span>CONTINUE SHOPPING</span>
+              <ArrowRight size={14} />
+            </Link>
+            <Link
+              href="/account"
+              className="inline-flex items-center justify-center gap-2 py-3 px-6 border border-line bg-white text-ink text-[11px] font-semibold tracking-[0.18em] uppercase hover:border-ink transition-colors"
+            >
+              <span>VIEW ACCOUNT</span>
+            </Link>
           </div>
         </div>
       </div>
-
-      {/* Action Buttons */}
-      <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
-        <Link
-          href="/"
-          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-md bg-zinc-900 text-white font-semibold text-xs uppercase tracking-wider hover:bg-black transition"
-        >
-          <ShoppingBag size={15} />
-          <span>Continue Shopping</span>
-        </Link>
-        <Link
-          href="/account"
-          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-md border border-zinc-300 text-zinc-800 font-semibold text-xs uppercase tracking-wider hover:bg-zinc-50 transition"
-        >
-          <span>View My Orders</span>
-          <ArrowRight size={15} />
-        </Link>
-      </div>
-    </div>
+    </main>
   );
 }
