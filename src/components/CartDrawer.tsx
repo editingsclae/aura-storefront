@@ -1,12 +1,12 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { formatPrice } from "@/logic";
 import { getLineItemState } from "@/logic/cart-view";
 import { useCartDrawer } from "@/logic/use-cart-view";
-import { X, Trash2, Package, ShoppingBag, ArrowRight } from "lucide-react";
+import { X, Minus, Plus, ShoppingBag, Package } from "lucide-react";
 
 export function CartDrawer() {
   const {
@@ -23,198 +23,195 @@ export function CartDrawer() {
     handleRemoveItem,
   } = useCartDrawer();
 
-  if (!isCartOpen) return null;
+  useEffect(() => {
+    if (isCartOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isCartOpen]);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && isCartOpen) {
+        closeCart();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isCartOpen, closeCart]);
 
   return (
-    <div className="fixed inset-0 z-50 flex justify-end">
-      {/* Dark overlay backdrop */}
+    <>
+      {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-black/50 backdrop-blur-xs transition-opacity duration-300"
+        className={`fixed inset-0 bg-ink/45 transition-opacity z-50 duration-300 ${
+          isCartOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+        }`}
         onClick={closeCart}
         aria-hidden="true"
       />
 
-      {/* Right-side sliding panel */}
-      <div
+      {/* Drawer */}
+      <aside
+        className={`fixed top-0 right-0 h-[100dvh] w-[min(420px,94vw)] bg-white z-50 flex flex-col shadow-2xl transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          isCartOpen ? "translate-x-0" : "translate-x-full"
+        }`}
         role="dialog"
         aria-modal="true"
-        aria-label="Shopping cart"
-        className="relative z-10 w-full max-w-md bg-white h-full shadow-2xl flex flex-col transition-transform duration-300 ease-out"
+        aria-label="Shopping Cart Drawer"
+        aria-hidden={!isCartOpen}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-zinc-200 bg-white">
-          <div className="flex items-center gap-2">
-            <ShoppingBag size={18} className="text-zinc-800" />
-            <h2 className="text-base font-bold text-zinc-900">Shopping Cart</h2>
-            <span className="text-xs font-mono text-zinc-500">
-              ({itemCount})
-            </span>
-          </div>
+        <div className="flex items-center justify-between px-6 py-5 border-b border-line bg-white">
+          <h2 className="text-[12.5px] font-bold tracking-[0.14em] text-ink uppercase">
+            YOUR CART ({itemCount})
+          </h2>
           <button
             ref={closeButtonRef}
             type="button"
             onClick={closeCart}
+            className="text-ink hover:opacity-60 transition-opacity p-1 cursor-pointer"
             aria-label="Close cart"
-            className="p-1.5 rounded-md text-zinc-500 hover:text-black hover:bg-zinc-100 transition focus:outline-none focus:ring-2 focus:ring-zinc-900"
           >
-            <X size={20} />
+            <X className="w-5 h-5 stroke-[2]" />
           </button>
         </div>
 
-        {/* Items List / Empty State */}
-        <div className="flex-1 overflow-y-auto p-6">
-          {items.length === 0 ? (
-            <div className="h-full flex flex-col items-center justify-center text-center space-y-4 py-12">
-              <div className="w-16 h-16 rounded-full bg-zinc-100 flex items-center justify-center text-zinc-400">
-                <ShoppingBag size={28} />
-              </div>
-              <div className="space-y-1">
-                <h3 className="text-sm font-bold text-zinc-900">Your cart is empty</h3>
-                <p className="text-xs text-zinc-500 max-w-xs">
-                  Looks like you haven&apos;t added any items yet.
-                </p>
-              </div>
-              <Link
-                href="/shop"
-                onClick={closeCart}
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-zinc-900 text-white rounded-md text-xs font-semibold hover:bg-black transition"
-              >
-                <span>Continue shopping</span>
-                <ArrowRight size={14} />
-              </Link>
-            </div>
-          ) : (
-            <div className="divide-y divide-zinc-100">
-              {items.map((item) => {
-                const lineState = getLineItemState(item, busyLineId, lineErrors);
+        {/* Body */}
+        <div className="flex-1 overflow-y-auto px-6 py-2 divide-y divide-line/60">
+          {items.length > 0 ? (
+            items.map((item) => {
+              const lineState = getLineItemState(item, busyLineId, lineErrors);
 
-                return (
-                  <div key={item.id} className="py-4 first:pt-0 last:pb-0">
-                    <div className="flex gap-3">
-                      {/* Thumbnail */}
-                      <div className="relative w-16 h-16 bg-zinc-100 rounded-md overflow-hidden shrink-0 border border-zinc-100 flex items-center justify-center">
-                        {item.thumbnail ? (
-                          <Image
-                            src={item.thumbnail}
-                            alt={item.title}
-                            fill
-                            sizes="64px"
-                            className="object-cover"
-                          />
-                        ) : (
-                          <Package size={20} className="text-zinc-400" />
-                        )}
+              return (
+                <div key={item.id} className="py-4 flex gap-4 items-center">
+                  <div className="relative w-18 h-20 bg-card rounded overflow-hidden shrink-0 group flex items-center justify-center">
+                    {item.thumbnail ? (
+                      <Image
+                        src={item.thumbnail}
+                        alt={item.title}
+                        fill
+                        sizes="72px"
+                        className="object-cover group-hover:scale-105 transition-transform"
+                      />
+                    ) : (
+                      <Package className="w-6 h-6 text-aura-gray" />
+                    )}
+                  </div>
+
+                  <div className="flex-1 min-w-0">
+                    <h4 className="text-xs font-bold tracking-wide text-ink uppercase truncate">
+                      {item.title}
+                    </h4>
+
+                    {lineState.showVariant && (
+                      <p className="text-[9.5px] font-bold tracking-[0.1em] uppercase text-aura-gray mt-0.5 truncate">
+                        {item.variant_title}
+                      </p>
+                    )}
+
+                    <p className="text-xs font-medium text-aura-gray mt-0.5">
+                      {formatPrice(item.unit_price, currencyCode)}
+                    </p>
+
+                    <div className="flex items-center justify-between mt-3">
+                      {/* Stepper */}
+                      <div className="flex items-center border border-line rounded bg-white">
+                        <button
+                          type="button"
+                          onClick={() => handleUpdateQuantity(item.id, item.quantity - 1)}
+                          disabled={!lineState.canDecrease}
+                          className="w-7 h-7 flex items-center justify-center text-ink hover:opacity-60 disabled:opacity-30 transition-opacity cursor-pointer"
+                          aria-label="Decrease quantity"
+                        >
+                          <Minus className="w-3 h-3 stroke-[2]" />
+                        </button>
+                        <span className="w-7 text-center text-xs font-semibold text-ink select-none">
+                          {item.quantity}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => handleUpdateQuantity(item.id, item.quantity + 1)}
+                          disabled={!lineState.canIncrease}
+                          className="w-7 h-7 flex items-center justify-center text-ink hover:opacity-60 disabled:opacity-30 transition-opacity cursor-pointer"
+                          aria-label="Increase quantity"
+                        >
+                          <Plus className="w-3 h-3 stroke-[2]" />
+                        </button>
                       </div>
 
-                      {/* Info & Controls */}
-                      <div className="flex-1 min-w-0 flex flex-col justify-between">
-                        <div className="flex items-start justify-between gap-2">
-                          <div className="min-w-0">
-                            <h4 className="text-xs font-semibold text-zinc-900 truncate">
-                              {item.title}
-                            </h4>
-                            {lineState.showVariant && (
-                              <p className="text-[11px] text-zinc-500 truncate">
-                                {item.variant_title}
-                              </p>
-                            )}
-                            <p className="text-[11px] font-mono text-zinc-600 mt-0.5">
-                              {formatPrice(item.unit_price, currencyCode)}
-                            </p>
-                          </div>
-
-                          <button
-                            type="button"
-                            onClick={() => handleRemoveItem(item.id)}
-                            disabled={lineState.isBusy}
-                            title="Remove item"
-                            aria-label={`Remove ${item.title}`}
-                            className="p-1 text-zinc-400 hover:text-rose-600 disabled:opacity-30 transition"
-                          >
-                            <Trash2 size={14} />
-                          </button>
-                        </div>
-
-                        {/* Stepper & Line total */}
-                        <div className="flex items-center justify-between mt-2">
-                          <div className="flex items-center border border-zinc-200 rounded bg-zinc-50 text-xs">
-                            <button
-                              type="button"
-                              onClick={() => handleUpdateQuantity(item.id, item.quantity - 1)}
-                              disabled={!lineState.canDecrease}
-                              aria-label="Decrease quantity"
-                              className="px-2 py-0.5 text-zinc-600 hover:text-black hover:bg-zinc-200 font-bold disabled:opacity-30 transition"
-                            >
-                              -
-                            </button>
-                            <span className="px-2.5 py-0.5 font-semibold font-mono text-center min-w-6 bg-white text-zinc-900">
-                              {item.quantity}
-                            </span>
-                            <button
-                              type="button"
-                              onClick={() => handleUpdateQuantity(item.id, item.quantity + 1)}
-                              disabled={!lineState.canIncrease}
-                              aria-label="Increase quantity"
-                              className="px-2 py-0.5 text-zinc-600 hover:text-black hover:bg-zinc-200 font-bold disabled:opacity-30 transition"
-                            >
-                              +
-                            </button>
-                          </div>
-
-                          <span className="text-xs font-bold font-mono text-zinc-900">
-                            {formatPrice(lineState.lineTotal, currencyCode)}
-                          </span>
-                        </div>
-                      </div>
+                      <span className="text-xs font-bold text-ink">
+                        {formatPrice(lineState.lineTotal, currencyCode)}
+                      </span>
                     </div>
 
-                    {/* Inline error for this line if stock or API error occurs */}
                     {lineState.error && (
                       <p className="text-[11px] text-rose-600 mt-1.5 font-medium">
                         {lineState.error}
                       </p>
                     )}
                   </div>
-                );
-              })}
+
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveItem(item.id)}
+                    disabled={lineState.isBusy}
+                    className="self-start text-aura-gray hover:text-ink p-1 transition-colors disabled:opacity-30 cursor-pointer"
+                    aria-label={`Remove ${item.title}`}
+                  >
+                    <X className="w-4 h-4 stroke-[1.8]" />
+                  </button>
+                </div>
+              );
+            })
+          ) : (
+            <div className="text-center py-20 flex flex-col items-center gap-3 text-aura-gray">
+              <ShoppingBag className="w-12 h-12 stroke-[1.2] text-cream" />
+              <p className="text-sm">Your cart is empty.</p>
+              <Link
+                href="/shop"
+                onClick={closeCart}
+                className="mt-2 inline-flex items-center justify-center bg-ink text-white text-[10.5px] font-semibold tracking-[0.18em] uppercase px-6 py-3 hover:bg-ink/80 transition-colors"
+              >
+                CONTINUE SHOPPING
+              </Link>
             </div>
           )}
         </div>
 
         {/* Footer */}
         {items.length > 0 && (
-          <div className="border-t border-zinc-200 bg-zinc-50 p-6 space-y-4">
-            <div className="flex items-center justify-between text-sm">
-              <span className="font-medium text-zinc-700">Subtotal</span>
-              <span className="font-bold font-mono text-base text-zinc-900">
-                {formatPrice(subtotal, currencyCode)}
-              </span>
+          <div className="border-t border-line p-6 bg-soft space-y-3">
+            <div className="flex items-center justify-between text-xs tracking-wider uppercase font-bold text-ink">
+              <span>SUBTOTAL</span>
+              <span className="text-base">{formatPrice(subtotal, currencyCode)}</span>
             </div>
-
-            <p className="text-[11px] text-zinc-500 leading-tight">
-              Delivery is calculated at checkout. Payment on delivery.
+            <p className="text-[10.5px] text-aura-gray">
+              Delivery calculated at checkout. Cash on delivery.
             </p>
-
-            <div className="space-y-2 pt-1">
-              <Link
-                href="/checkout"
-                onClick={closeCart}
-                className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-zinc-900 text-white rounded-md text-xs font-semibold uppercase tracking-wider hover:bg-black transition shadow-sm"
-              >
-                <span>Checkout</span>
-                <ArrowRight size={14} />
-              </Link>
+            <div className="flex flex-col gap-2 pt-1">
               <Link
                 href="/cart"
                 onClick={closeCart}
-                className="w-full flex items-center justify-center py-2 px-4 border border-zinc-300 bg-white text-zinc-700 rounded-md text-xs font-semibold hover:bg-zinc-100 transition"
+                className="w-full inline-flex items-center justify-center border border-ink text-ink bg-transparent text-[11px] font-semibold tracking-[0.18em] uppercase py-3.5 hover:bg-ink hover:text-white transition-colors"
               >
-                View cart
+                VIEW CART
+              </Link>
+              <Link
+                href="/checkout"
+                onClick={closeCart}
+                className="w-full inline-flex items-center justify-center bg-ink text-white text-[11px] font-semibold tracking-[0.18em] uppercase py-3.5 hover:bg-ink/85 transition-colors shadow-sm"
+              >
+                CHECKOUT
               </Link>
             </div>
           </div>
         )}
-      </div>
-    </div>
+      </aside>
+    </>
   );
 }

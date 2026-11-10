@@ -15,10 +15,9 @@ export type SectionPlace = { key: SectionKey; count: number };
 // what the portal is told AND what the page draws (see HomePage and
 // visibleSections). To add or remove a section, change the page and this list together.
 export const SECTIONS: SectionPlace[] = [
-  { key: "new_arrivals", count: 8 },
-  { key: "best_sellers", count: 4 },
-  { key: "trending", count: 4 },
   { key: "featured", count: 4 },
+  { key: "best_sellers", count: 5 },
+  { key: "new_arrivals", count: 4 },
 ];
 
 export const LAYOUT = { promo_banners: 2, sections: SECTIONS };

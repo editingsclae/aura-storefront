@@ -1,23 +1,14 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
+import { Search, User, ShoppingBag, Menu, X } from "lucide-react";
 import { MerchantCategory, STORE_NAME } from "@/logic";
 import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/AuthContext";
-import {
-  ShoppingBag,
-  User,
-  Menu,
-  X,
-  ChevronRight,
-  ChevronDown,
-  Search,
-} from "lucide-react";
+import { SearchModal } from "./SearchModal";
 
-// How many categories sit in the top bar. The rest are only in the
-// "All Categories" dropdown, which lists every category.
 const TOP_BAR_CATEGORIES = 5;
 
 interface HeaderProps {
@@ -25,302 +16,186 @@ interface HeaderProps {
 }
 
 export function Header({ categories }: HeaderProps) {
+  const pathname = usePathname();
   const { itemCount, openCart } = useCart();
   const { customer } = useAuth();
-  const pathname = usePathname();
-  const router = useRouter();
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [desktopSearch, setDesktopSearch] = useState("");
-  const [mobileSearch, setMobileSearch] = useState("");
-
-  const [categoriesOpen, setCategoriesOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement | null>(null);
-
-  const isCartOrCheckout = pathname === "/cart" || pathname === "/checkout";
   const topCategories = categories.slice(0, TOP_BAR_CATEGORIES);
 
-  // Close the categories dropdown on an outside click or Esc. Choosing a link
-  // closes it through the link's own onClick.
-  useEffect(() => {
-    if (!categoriesOpen) return;
-    const handlePointerDown = (e: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
-        setCategoriesOpen(false);
-      }
-    };
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setCategoriesOpen(false);
-    };
-    document.addEventListener("mousedown", handlePointerDown);
-    document.addEventListener("keydown", handleKeyDown);
-    return () => {
-      document.removeEventListener("mousedown", handlePointerDown);
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [categoriesOpen]);
+  // Store name branding
+  const nameParts = (STORE_NAME || "Store").trim().split(/\s+/);
+  const primaryWord = nameParts[0] || "STORE";
+  const secondaryWord = nameParts.slice(1).join(" ");
 
-  const navLinkClass = (active: boolean) =>
-    `text-sm whitespace-nowrap transition hover:text-black ${
-      active ? "font-semibold text-zinc-900" : "font-medium text-zinc-600"
-    }`;
+  // Minimal header for authentication pages
+  const isAuthPage =
+    pathname === "/account/login" ||
+    pathname === "/account/register" ||
+    pathname === "/account/forgot-password";
 
-  const handleDesktopSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    const query = desktopSearch.trim();
-    if (query) {
-      router.push(`/shop?q=${encodeURIComponent(query)}`);
-      setDesktopSearch("");
-    } else {
-      router.push("/shop");
-    }
-  };
-
-  const handleMobileSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    const query = mobileSearch.trim();
-    setMobileMenuOpen(false);
-    if (query) {
-      router.push(`/shop?q=${encodeURIComponent(query)}`);
-      setMobileSearch("");
-    } else {
-      router.push("/shop");
-    }
-  };
-
-  return (
-    <header className="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-zinc-200">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Row 1: store name, search, account and cart */}
-        <div className="flex items-center justify-between h-16 gap-3 sm:gap-6">
-          {/* Left: Mobile Menu Toggle & Store Name */}
-          <div className="flex items-center gap-3 sm:gap-4 flex-shrink-0">
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 text-zinc-700 hover:text-black hover:bg-zinc-100 rounded-md transition"
-              aria-label="Toggle menu"
-            >
-              {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
-            </button>
-
-            <Link
-              href="/"
-              className="font-bold tracking-widest text-lg sm:text-xl uppercase text-zinc-900 hover:opacity-80 transition"
-            >
-              {STORE_NAME}
-            </Link>
-          </div>
-
-          {/* Center: Desktop Search Bar */}
-          <form
-            onSubmit={handleDesktopSearch}
-            role="search"
-            className="hidden md:flex flex-1 max-w-2xl mx-auto items-stretch"
-          >
-            <input
-              type="text"
-              value={desktopSearch}
-              onChange={(e) => setDesktopSearch(e.target.value)}
-              placeholder="Search for products..."
-              aria-label="Search products"
-              className="w-full min-w-0 text-sm bg-zinc-50 border border-zinc-200 border-r-0 rounded-l-lg px-4 py-2.5 text-zinc-900 focus:outline-none focus:ring-1 focus:ring-zinc-900 focus:bg-white transition"
-            />
-            <button
-              type="submit"
-              aria-label="Search"
-              className="px-4 bg-zinc-900 hover:bg-black text-white rounded-r-lg transition flex items-center justify-center"
-            >
-              <Search size={16} />
-            </button>
-          </form>
-
-          {/* Right: Customer & Cart Actions */}
-          <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
-            <Link
-              href="/account"
-              className="flex items-center gap-2 p-2 text-zinc-700 hover:text-black hover:bg-zinc-100 rounded-md transition text-sm"
-              title={customer ? `Logged in as ${customer.email}` : "Sign In"}
-            >
-              <User size={19} />
-              <span className="hidden sm:inline font-medium">
-                {customer ? customer.first_name || "Account" : "Sign In"}
+  if (isAuthPage) {
+    return (
+      <header className="bg-white border-b border-line sticky top-0 z-40">
+        <div className="max-w-[1240px] mx-auto px-6 py-4 flex items-center justify-between">
+          <Link href="/" className="flex flex-col items-start leading-none group">
+            <span className="font-serif text-3xl font-medium tracking-[0.14em] text-ink">
+              {primaryWord}
+            </span>
+            {secondaryWord && (
+              <span className="text-[8.5px] font-bold tracking-[0.5em] text-ink mt-1">
+                {secondaryWord}
               </span>
-            </Link>
-
-            {isCartOrCheckout ? (
-              <Link
-                href="/cart"
-                id="header-cart-button"
-                className="relative flex items-center gap-2 p-2 text-zinc-700 hover:text-black hover:bg-zinc-100 rounded-md transition text-sm"
-                title="View Cart"
-              >
-                <ShoppingBag size={19} />
-                <span className="hidden sm:inline font-medium">Cart</span>
-                {itemCount > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-zinc-900 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center">
-                    {itemCount}
-                  </span>
-                )}
-              </Link>
-            ) : (
-              <button
-                type="button"
-                id="header-cart-button"
-                onClick={openCart}
-                className="relative flex items-center gap-2 p-2 text-zinc-700 hover:text-black hover:bg-zinc-100 rounded-md transition text-sm cursor-pointer"
-                title="Open Cart"
-                aria-label={`Open Cart with ${itemCount} items`}
-              >
-                <ShoppingBag size={19} />
-                <span className="hidden sm:inline font-medium">Cart</span>
-                {itemCount > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-zinc-900 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center">
-                    {itemCount}
-                  </span>
-                )}
-              </button>
             )}
-          </div>
-        </div>
-
-        {/* Row 2 (desktop): All Categories dropdown, Home, Shop and the first categories */}
-        <nav
-          aria-label="Main"
-          className="hidden md:flex items-center gap-5 h-11 border-t border-zinc-100"
-        >
-          {categories.length > 0 && (
-            <div ref={dropdownRef} className="relative flex-shrink-0">
-              <button
-                type="button"
-                onClick={() => setCategoriesOpen((open) => !open)}
-                aria-expanded={categoriesOpen}
-                aria-haspopup="true"
-                className="flex items-center gap-2 px-3.5 py-1.5 bg-zinc-900 hover:bg-black text-white text-sm font-semibold rounded-md transition cursor-pointer"
-              >
-                <Menu size={16} />
-                <span>All Categories</span>
-                <ChevronDown
-                  size={14}
-                  className={`transition-transform ${categoriesOpen ? "rotate-180" : ""}`}
-                />
-              </button>
-
-              {categoriesOpen && (
-                <div className="absolute left-0 top-full mt-2 w-72 max-h-[70vh] overflow-y-auto bg-white border border-zinc-200 rounded-lg shadow-lg p-2 z-50">
-                  {categories.map((cat) => (
-                    <Link
-                      key={cat.id}
-                      href={`/c/${cat.handle}`}
-                      onClick={() => setCategoriesOpen(false)}
-                      className="flex items-center justify-between gap-3 px-3 py-2.5 text-sm font-medium text-zinc-700 hover:text-black hover:bg-zinc-100 rounded-md transition"
-                    >
-                      <span className="truncate">{cat.name}</span>
-                      <ChevronRight size={15} className="text-zinc-400 flex-shrink-0" />
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
-
-          <Link href="/" className={navLinkClass(pathname === "/")}>
-            Home
           </Link>
-          <Link href="/shop" className={navLinkClass(pathname === "/shop")}>
-            Shop
-          </Link>
-
-          {/* Category links need room: the first 3 show from the lg breakpoint,
-              all 5 from xl. Every category is also in the dropdown. */}
-          {topCategories.map((cat, index) => (
-            <Link
-              key={cat.id}
-              href={`/c/${cat.handle}`}
-              title={cat.name}
-              className={`${index < 3 ? "hidden lg:block" : "hidden xl:block"} max-w-[14rem] truncate ${navLinkClass(
-                pathname === `/c/${cat.handle}`
-              )}`}
-            >
-              {cat.name}
-            </Link>
-          ))}
-        </nav>
-      </div>
-
-      {/* Mobile Drawer Menu */}
-      {mobileMenuOpen && (
-        <div className="md:hidden border-t border-zinc-200 bg-white px-4 pt-3 pb-6 space-y-3">
-          {/* Mobile Search Box at top of menu */}
-          <form onSubmit={handleMobileSearch} className="relative mb-3">
-            <input
-              type="text"
-              value={mobileSearch}
-              onChange={(e) => setMobileSearch(e.target.value)}
-              placeholder="Search products..."
-              className="w-full text-xs bg-zinc-50 border border-zinc-200 rounded-lg pl-8 pr-3 py-2 text-zinc-900 focus:outline-none focus:ring-1 focus:ring-zinc-900"
-            />
-            <Search
-              size={14}
-              className="absolute left-2.5 top-1/2 -translate-y-1/2 text-zinc-400 pointer-events-none"
-            />
-          </form>
-
           <Link
             href="/"
-            onClick={() => setMobileMenuOpen(false)}
-            className="flex items-center justify-between py-2 text-sm font-semibold text-zinc-900 hover:text-black border-b border-zinc-100"
+            className="text-[11.5px] font-semibold tracking-wider text-ink hover:opacity-60 transition-opacity"
           >
-            <span>Home</span>
-            <ChevronRight size={16} className="text-zinc-400" />
+            &larr; BACK TO STORE
+          </Link>
+        </div>
+      </header>
+    );
+  }
+
+  return (
+    <>
+      <header className="bg-white border-b border-line sticky top-0 z-40">
+        <div className="max-w-[1240px] mx-auto px-6 py-4 flex items-center justify-between">
+          {/* Logo */}
+          <Link href="/" className="flex flex-col items-start leading-none group shrink-0">
+            <span className="font-serif text-2xl sm:text-3xl font-medium tracking-[0.14em] text-ink">
+              {primaryWord}
+            </span>
+            {secondaryWord && (
+              <span className="text-[8px] sm:text-[8.5px] font-bold tracking-[0.45em] sm:tracking-[0.5em] text-ink mt-1">
+                {secondaryWord}
+              </span>
+            )}
           </Link>
 
-          {/* Shop Link */}
-          <Link
-            href="/shop"
-            onClick={() => setMobileMenuOpen(false)}
-            className="flex items-center justify-between py-2 text-sm font-semibold text-zinc-900 hover:text-black border-b border-zinc-100"
-          >
-            <span>Shop</span>
-            <ChevronRight size={16} className="text-zinc-400" />
-          </Link>
+          {/* Desktop Nav */}
+          <nav className="hidden lg:flex items-center gap-8">
+            <Link
+              href="/shop"
+              className={`text-[11.5px] font-semibold tracking-wider uppercase transition-opacity hover:opacity-60 ${
+                pathname === "/shop" ? "border-b-2 border-ink pb-0.5" : ""
+              }`}
+            >
+              SHOP
+            </Link>
+            {topCategories.map((cat) => (
+              <Link
+                key={cat.id}
+                href={`/c/${cat.handle}`}
+                className={`text-[11.5px] font-semibold tracking-wider uppercase transition-opacity hover:opacity-60 ${
+                  pathname === `/c/${cat.handle}` ? "border-b-2 border-ink pb-0.5" : ""
+                }`}
+              >
+                {cat.name}
+              </Link>
+            ))}
+          </nav>
 
-          {categories.length > 0 && (
-            <div className="space-y-1">
-              <div className="text-xs font-semibold text-zinc-400 uppercase tracking-wider my-2">
-                Categories
-              </div>
-              {categories.map((cat) => (
-                <Link
-                  key={cat.id}
-                  href={`/c/${cat.handle}`}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center justify-between py-2 text-sm font-medium text-zinc-800 hover:text-black border-b border-zinc-100"
-                >
-                  <span>{cat.name}</span>
-                  <span className="text-xs text-zinc-400 font-mono">
-                    {cat.product_count}
-                  </span>
-                </Link>
-              ))}
-            </div>
-          )}
+          {/* Icons */}
+          <div className="flex items-center gap-4 sm:gap-5 shrink-0">
+            <button
+              type="button"
+              onClick={() => setIsSearchOpen(true)}
+              className="p-1 text-ink hover:opacity-60 transition-opacity cursor-pointer"
+              aria-label="Search products"
+            >
+              <Search className="w-5 h-5 stroke-[1.6]" />
+            </button>
 
-          <div className="pt-3">
             <Link
               href="/account"
-              onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center gap-2 py-2 text-sm font-medium text-zinc-800"
+              className={`p-1 text-ink hover:opacity-60 transition-opacity ${
+                pathname.startsWith("/account") ? "border-b-2 border-ink" : ""
+              }`}
+              aria-label="Account"
+              title={customer ? `Account (${customer.email})` : "Account"}
             >
-              <User size={16} />
-              <span>
-                {customer
-                  ? `My Account (${customer.email})`
-                  : "Customer Sign In / Register"}
-              </span>
+              <User className="w-5 h-5 stroke-[1.6]" />
             </Link>
+
+            <button
+              type="button"
+              id="header-cart-button"
+              onClick={openCart}
+              className="relative p-1 text-ink hover:opacity-60 transition-opacity cursor-pointer"
+              aria-label={`View shopping cart with ${itemCount} items`}
+            >
+              <ShoppingBag className="w-5 h-5 stroke-[1.6]" />
+              {itemCount > 0 && (
+                <span className="absolute -top-1.5 -right-1.5 bg-ink text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
+                  {itemCount}
+                </span>
+              )}
+            </button>
+
+            {/* Mobile menu trigger */}
+            <button
+              type="button"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="lg:hidden p-1 text-ink cursor-pointer"
+              aria-label="Toggle menu"
+            >
+              {isMobileMenuOpen ? (
+                <X className="w-6 h-6 stroke-[1.6]" />
+              ) : (
+                <Menu className="w-6 h-6 stroke-[1.6]" />
+              )}
+            </button>
           </div>
         </div>
-      )}
-    </header>
+
+        {/* Mobile menu dropdown */}
+        {isMobileMenuOpen && (
+          <div className="lg:hidden border-t border-line bg-white px-6 py-6 space-y-4">
+            <Link
+              href="/shop"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="block text-sm font-semibold tracking-wider uppercase text-ink"
+            >
+              Shop All Products
+            </Link>
+            {categories.map((cat) => (
+              <Link
+                key={cat.id}
+                href={`/c/${cat.handle}`}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="block text-sm font-semibold tracking-wider uppercase text-aura-gray hover:text-ink transition-colors"
+              >
+                {cat.name}
+              </Link>
+            ))}
+            <div className="pt-4 border-t border-line flex items-center justify-between">
+              <Link
+                href="/account"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="text-xs uppercase font-bold tracking-wider text-ink"
+              >
+                {customer ? "My Account" : "Sign In / Register"}
+              </Link>
+              <button
+                type="button"
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  openCart();
+                }}
+                className="text-xs uppercase font-bold tracking-wider text-ink cursor-pointer"
+              >
+                Cart ({itemCount})
+              </button>
+            </div>
+          </div>
+        )}
+      </header>
+
+      <SearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
+    </>
   );
 }

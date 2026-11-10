@@ -1,16 +1,70 @@
 @import "tailwindcss";
 
+@theme {
+  --font-serif: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
+  --font-sans: var(--font-inter), "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --color-cream: #d9cdbd;
+  --color-hero: #f3ede5;
+  --color-soft: #f7f4ef;
+  --color-card: #f2ece3;
+  --color-ink: #1c1a17;
+  --color-aura-gray: #7a756d;
+  --color-line: #e5ded3;
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #09090b;
-  --muted: #71717a;
-  --border: #e4e4e7;
-  --card: #fafafa;
+  --cream: #d9cdbd;
+  --hero-bg: #f3ede5;
+  --soft-bg: #f7f4ef;
+  --card-bg: #f2ece3;
+  --ink: #1c1a17;
+  --gray: #7a756d;
+  --line: #e5ded3;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  color: var(--color-ink);
+  background-color: #ffffff;
+  font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
+}
+
+/* Custom range input styling */
+input[type="range"]::-webkit-slider-thumb {
+  pointer-events: auto;
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 1.5px solid #1c1a17;
+  cursor: grab;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+}
+
+input[type="range"]::-moz-range-thumb {
+  pointer-events: auto;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 1.5px solid #1c1a17;
+  cursor: grab;
+}
+
+/* Custom smooth transitions */
+.fade-in {
+  animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.99);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
