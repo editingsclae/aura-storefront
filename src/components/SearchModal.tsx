@@ -73,7 +73,7 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search clean skincare formulas, products..."
+            placeholder="Search products..."
             className="w-full text-base sm:text-lg font-sans placeholder:text-aura-gray/70 outline-none text-ink bg-transparent"
           />
           {query && (

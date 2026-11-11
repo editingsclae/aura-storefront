@@ -138,7 +138,7 @@ export default function RegisterPage() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full py-3.5 px-6 bg-ink text-white rounded text-[11px] font-semibold tracking-[0.18em] uppercase hover:bg-[#3a352e] disabled:bg-zinc-300 transition flex items-center justify-center gap-2 cursor-pointer shadow-xs"
+              className="w-full py-3.5 px-6 bg-ink text-white rounded text-[11px] font-semibold tracking-[0.18em] uppercase hover:bg-ink-soft disabled:bg-zinc-300 transition flex items-center justify-center gap-2 cursor-pointer shadow-xs"
             >
               <span>{isSubmitting ? "CREATING ACCOUNT..." : "REGISTER"}</span>
               <ArrowRight size={14} />

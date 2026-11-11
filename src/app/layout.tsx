@@ -23,8 +23,8 @@ const inter = Inter({
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: `${STORE_NAME} — Pure Ingredients. Visible Results.`,
-  description: `Elevated skincare made with clean ingredients and backed by science. Shop online at ${STORE_NAME}.`,
+  title: STORE_NAME,
+  description: `Shop online at ${STORE_NAME}.`,
 };
 
 export default async function RootLayout({

@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 
 export const metadata = {
   title: `Shop | ${STORE_NAME}`,
-  description: `Browse all products at ${STORE_NAME}. Fast delivery across Tunisia. Cash on delivery.`,
+  description: `Browse all products at ${STORE_NAME}. Cash on delivery.`,
 };
 
 export default async function ShopPage() {
@@ -31,7 +31,7 @@ export default async function ShopPage() {
             Shop All
           </h1>
           <p className="text-xs sm:text-sm text-aura-gray max-w-xl mx-auto">
-            Clean, clinically tested formulas for every step of your ritual.
+            Browse our complete collection.
           </p>
         </div>
       </section>

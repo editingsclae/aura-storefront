@@ -40,12 +40,12 @@ export default function CartPage() {
             Your cart is empty
           </h1>
           <p className="text-xs text-aura-gray max-w-xs mx-auto">
-            You have no items in your shopping bag. Explore our collection and start your ritual.
+            You have no items in your shopping bag. Explore our collection.
           </p>
           <div className="pt-4">
             <Link
               href="/shop"
-              className="inline-flex items-center gap-2 text-[11px] font-semibold tracking-[0.18em] uppercase px-6 py-3.5 bg-ink text-white hover:bg-[#3a352e] transition-colors"
+              className="inline-flex items-center gap-2 text-[11px] font-semibold tracking-[0.18em] uppercase px-6 py-3.5 bg-ink text-white hover:bg-ink-soft transition-colors"
             >
               <span>EXPLORE SHOP</span>
             </Link>
@@ -232,7 +232,7 @@ export default function CartPage() {
 
           <Link
             href="/checkout"
-            className="w-full inline-flex items-center justify-center bg-ink text-white text-[11px] font-semibold tracking-[0.18em] uppercase py-4 px-6 hover:bg-[#3a352e] transition-colors shadow-xs text-center"
+            className="w-full inline-flex items-center justify-center bg-ink text-white text-[11px] font-semibold tracking-[0.18em] uppercase py-4 px-6 hover:bg-ink-soft transition-colors shadow-xs text-center"
           >
             PROCEED TO CHECKOUT
           </Link>

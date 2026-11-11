@@ -57,19 +57,15 @@ export default async function HomePage() {
         <section className="bg-hero pb-14 overflow-hidden border-b border-line">
           <div className="max-w-[1240px] mx-auto px-6 pt-10 sm:pt-16">
             <div className="max-w-xl py-4">
-              <p className="text-[11px] font-semibold tracking-[0.28em] uppercase text-ink mb-[18px]">
-                Official Storefront
-              </p>
               <h1 className="font-serif text-[44px] sm:text-[54px] lg:text-[60px] font-medium leading-[1.12] tracking-[0.01em] text-ink mb-[26px]">
                 {STORE_NAME}
               </h1>
               <p className="text-[14.5px] leading-[1.75] text-aura-gray mb-[34px] max-w-md">
-                Browse authentic products from {STORE_NAME}. Fast delivery across
-                Tunisia with cash on delivery.
+                Welcome to {STORE_NAME}.
               </p>
               <Link
                 href="/shop"
-                className="inline-flex items-center gap-2.5 bg-ink text-white text-[11px] font-semibold tracking-[0.18em] uppercase px-[30px] py-[16px] hover:bg-ink-hover transition-colors group"
+                className="inline-flex items-center gap-2.5 bg-ink text-white text-[11px] font-semibold tracking-[0.18em] uppercase px-[30px] py-[16px] hover:bg-ink-soft transition-colors group"
               >
                 <span>SHOP NOW</span>
                 <ArrowRight className="w-[15px] h-[15px] group-hover:translate-x-1 transition-transform" />

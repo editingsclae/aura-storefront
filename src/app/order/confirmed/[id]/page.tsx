@@ -34,7 +34,7 @@ export default async function OrderConfirmedPage({
           <div className="pt-2">
             <Link
               href="/"
-              className="inline-flex items-center gap-2 text-[11px] font-semibold tracking-[0.18em] uppercase px-6 py-3 bg-ink text-white hover:bg-[#3a352e] transition-colors"
+              className="inline-flex items-center gap-2 text-[11px] font-semibold tracking-[0.18em] uppercase px-6 py-3 bg-ink text-white hover:bg-ink-soft transition-colors"
             >
               <span>RETURN TO STORE</span>
             </Link>
@@ -207,7 +207,7 @@ export default async function OrderConfirmedPage({
           <div className="pt-4 flex flex-col sm:flex-row gap-3 justify-center">
             <Link
               href="/shop"
-              className="inline-flex items-center justify-center gap-2 py-3 px-6 bg-ink text-white text-[11px] font-semibold tracking-[0.18em] uppercase hover:bg-[#3a352e] transition-colors"
+              className="inline-flex items-center justify-center gap-2 py-3 px-6 bg-ink text-white text-[11px] font-semibold tracking-[0.18em] uppercase hover:bg-ink-soft transition-colors"
             >
               <span>CONTINUE SHOPPING</span>
               <ArrowRight size={14} />

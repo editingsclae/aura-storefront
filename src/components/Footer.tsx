@@ -7,7 +7,7 @@ import {
   getFooterSettings,
   type FooterNetwork,
 } from "@/logic";
-import { Truck, RotateCcw, ShieldCheck } from "lucide-react";
+import { ShieldCheck } from "lucide-react";
 
 function SocialIcon({ network }: { network: FooterNetwork }) {
   const common = {
@@ -48,7 +48,7 @@ export async function Footer() {
   const footer = await getFooterSettings();
   const name = footer.store_name || STORE_NAME;
   const description =
-    footer.description || "Elevated skincare made with clean ingredients and backed by science.";
+    footer.description || "Cash on delivery across Tunisia.";
 
   const nameParts = name.trim().split(/\s+/);
   const primaryWord = nameParts[0] || "STORE";
@@ -145,28 +145,8 @@ export async function Footer() {
           </div>
 
           {/* Perks */}
-          <div className="lg:col-span-3 flex flex-col gap-5 sm:gap-6">
-            <div className="flex items-start gap-3.5">
-              <Truck className="w-5 h-5 text-ink stroke-[1.4] shrink-0 mt-0.5" />
-              <div>
-                <h5 className="text-[10.5px] font-bold tracking-[0.1em] uppercase mb-0.5 text-ink">
-                  EXPRESS DELIVERY
-                </h5>
-                <p className="text-[11px] text-aura-gray">Across Tunisia</p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-3.5">
-              <RotateCcw className="w-5 h-5 text-ink stroke-[1.4] shrink-0 mt-0.5" />
-              <div>
-                <h5 className="text-[10.5px] font-bold tracking-[0.1em] uppercase mb-0.5 text-ink">
-                  EASY RETURNS
-                </h5>
-                <p className="text-[11px] text-aura-gray">Hassle free policy</p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-3.5">
+          <div className="lg:col-span-3 flex flex-col justify-start">
+            <div className="flex items-start gap-3.5 p-4 rounded bg-soft border border-line">
               <ShieldCheck className="w-5 h-5 text-ink stroke-[1.4] shrink-0 mt-0.5" />
               <div>
                 <h5 className="text-[10.5px] font-bold tracking-[0.1em] uppercase mb-0.5 text-ink">

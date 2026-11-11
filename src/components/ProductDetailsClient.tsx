@@ -67,7 +67,7 @@ export function ProductDetailsClient({ product }: ProductDetailsClientProps) {
             ? "SOLD OUT"
             : inventory !== undefined
             ? `IN STOCK (${inventory} AVAILABLE)`
-            : "IN STOCK — SHIPS IN 1–2 DAYS"}
+            : "IN STOCK"}
         </span>
       </div>
 

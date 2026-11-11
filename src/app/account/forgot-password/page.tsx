@@ -52,7 +52,7 @@ export default function ForgotPasswordPage() {
           <div className="pt-2">
             <Link
               href="/account/login"
-              className="inline-flex items-center gap-2 text-[11px] font-semibold tracking-[0.18em] uppercase px-6 py-3 bg-ink text-white hover:bg-[#3a352e] transition-colors"
+              className="inline-flex items-center gap-2 text-[11px] font-semibold tracking-[0.18em] uppercase px-6 py-3 bg-ink text-white hover:bg-ink-soft transition-colors"
             >
               <span>SIGN IN</span>
             </Link>
@@ -107,7 +107,7 @@ export default function ForgotPasswordPage() {
               <button
                 type="submit"
                 disabled={busy !== null}
-                className="w-full py-3.5 px-6 bg-ink text-white rounded text-[11px] font-semibold tracking-[0.18em] uppercase hover:bg-[#3a352e] disabled:bg-zinc-300 transition flex items-center justify-center gap-2 cursor-pointer shadow-xs"
+                className="w-full py-3.5 px-6 bg-ink text-white rounded text-[11px] font-semibold tracking-[0.18em] uppercase hover:bg-ink-soft disabled:bg-zinc-300 transition flex items-center justify-center gap-2 cursor-pointer shadow-xs"
               >
                 <span>{busy === "send" ? "SENDING CODE..." : "SEND CODE"}</span>
                 <ArrowRight size={14} />
@@ -175,7 +175,7 @@ export default function ForgotPasswordPage() {
               <button
                 type="submit"
                 disabled={busy !== null}
-                className="w-full py-3.5 px-6 bg-ink text-white rounded text-[11px] font-semibold tracking-[0.18em] uppercase hover:bg-[#3a352e] disabled:bg-zinc-300 transition flex items-center justify-center gap-2 cursor-pointer shadow-xs"
+                className="w-full py-3.5 px-6 bg-ink text-white rounded text-[11px] font-semibold tracking-[0.18em] uppercase hover:bg-ink-soft disabled:bg-zinc-300 transition flex items-center justify-center gap-2 cursor-pointer shadow-xs"
               >
                 <span>{busy === "reset" ? "CHANGING..." : "UPDATE PASSWORD"}</span>
                 <ArrowRight size={14} />

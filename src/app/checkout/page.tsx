@@ -67,7 +67,7 @@ export default function CheckoutPage() {
           <div className="pt-4">
             <Link
               href="/shop"
-              className="inline-flex items-center gap-2 text-[11px] font-semibold tracking-[0.18em] uppercase px-6 py-3.5 bg-ink text-white hover:bg-[#3a352e] transition-colors"
+              className="inline-flex items-center gap-2 text-[11px] font-semibold tracking-[0.18em] uppercase px-6 py-3.5 bg-ink text-white hover:bg-ink-soft transition-colors"
             >
               <span>RETURN TO SHOP</span>
             </Link>
@@ -330,7 +330,7 @@ export default function CheckoutPage() {
                   <button
                     type="submit"
                     disabled={shippingLoading}
-                    className="w-full py-3.5 px-6 bg-ink text-white rounded text-[11px] font-semibold tracking-[0.18em] uppercase hover:bg-[#3a352e] disabled:bg-zinc-300 transition cursor-pointer"
+                    className="w-full py-3.5 px-6 bg-ink text-white rounded text-[11px] font-semibold tracking-[0.18em] uppercase hover:bg-ink-soft disabled:bg-zinc-300 transition cursor-pointer"
                   >
                     {shippingLoading
                       ? "SAVING ADDRESS..."
@@ -409,7 +409,7 @@ export default function CheckoutPage() {
                               onChange={() =>
                                 setSelectedShippingOptionId(opt.id)
                               }
-                              className="text-ink focus:ring-ink accent-[#1c1a17]"
+                              className="text-ink focus:ring-ink accent-ink"
                             />
                             <div>
                               <p className="font-bold text-xs uppercase tracking-wider text-ink">
@@ -434,7 +434,7 @@ export default function CheckoutPage() {
                     type="button"
                     onClick={handleConfirmShipping}
                     disabled={shippingLoading || shippingOptions.length === 0}
-                    className="w-full py-3.5 px-6 bg-ink text-white rounded text-[11px] font-semibold tracking-[0.18em] uppercase hover:bg-[#3a352e] disabled:bg-zinc-300 transition cursor-pointer"
+                    className="w-full py-3.5 px-6 bg-ink text-white rounded text-[11px] font-semibold tracking-[0.18em] uppercase hover:bg-ink-soft disabled:bg-zinc-300 transition cursor-pointer"
                   >
                     {shippingLoading
                       ? "UPDATING SHIPPING..."
@@ -492,7 +492,7 @@ export default function CheckoutPage() {
                     type="button"
                     onClick={handlePlaceOrder}
                     disabled={submittingOrder}
-                    className="w-full py-4 px-6 bg-ink text-white rounded font-bold text-xs tracking-[0.18em] uppercase hover:bg-[#3a352e] disabled:bg-zinc-300 transition shadow-xs cursor-pointer"
+                    className="w-full py-4 px-6 bg-ink text-white rounded font-bold text-xs tracking-[0.18em] uppercase hover:bg-ink-soft disabled:bg-zinc-300 transition shadow-xs cursor-pointer"
                   >
                     {submittingOrder ? "PLACING ORDER..." : "PLACE ORDER NOW"}
                   </button>
@@ -593,7 +593,7 @@ export default function CheckoutPage() {
 
           <div className="pt-2 text-center">
             <span className="inline-block border border-line bg-white text-aura-gray text-[9px] font-bold tracking-wider uppercase px-2.5 py-1 rounded">
-              CASH ON DELIVERY &bull; FREE INSPECTION
+              CASH ON DELIVERY
             </span>
           </div>
         </aside>

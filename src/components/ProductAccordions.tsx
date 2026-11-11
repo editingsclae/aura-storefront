@@ -58,7 +58,6 @@ export function ProductAccordions({ description }: ProductAccordionsProps) {
                 <b className="text-ink">Cash on delivery</b> — pay the courier in cash on arrival.
               </li>
               <li>Delivery options and rates are calculated at checkout.</li>
-              <li>Inspect your parcel on delivery across Tunisia.</li>
             </ul>
           </div>
         )}

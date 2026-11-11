@@ -49,7 +49,7 @@ export default function OrderDetailPage({ params }: OrderDetailPageProps) {
           <div className="pt-2">
             <Link
               href="/account"
-              className="inline-flex items-center gap-2 text-[11px] font-semibold tracking-[0.18em] uppercase px-6 py-3 bg-ink text-white hover:bg-[#3a352e] transition-colors"
+              className="inline-flex items-center gap-2 text-[11px] font-semibold tracking-[0.18em] uppercase px-6 py-3 bg-ink text-white hover:bg-ink-soft transition-colors"
             >
               <span>BACK TO ORDERS</span>
             </Link>
