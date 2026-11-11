@@ -182,7 +182,7 @@ export default function AccountPage() {
                   <div className="pt-2">
                     <Link
                       href="/shop"
-                      className="inline-flex items-center gap-2 text-[11px] font-semibold tracking-[0.18em] uppercase px-5 py-2.5 bg-ink text-white hover:bg-[#3a352e] transition-colors"
+                      className="inline-flex items-center gap-2 text-[11px] font-semibold tracking-[0.18em] uppercase px-5 py-2.5 bg-ink text-white hover:bg-ink-hover transition-colors"
                     >
                       <span>BROWSE CATALOG</span>
                     </Link>

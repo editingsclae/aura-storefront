@@ -58,7 +58,7 @@ export default function EmailVerificationCard({ email, onVerified }: Props) {
         <button
           type="submit"
           disabled={busy !== null || !isComplete}
-          className="px-5 py-2.5 rounded bg-ink text-white text-[11px] font-semibold tracking-[0.16em] uppercase hover:bg-[#3a352e] transition disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+          className="px-5 py-2.5 rounded bg-ink text-white text-[11px] font-semibold tracking-[0.16em] uppercase hover:bg-ink-hover transition disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
         >
           {busy === "confirm" ? "CHECKING..." : "CONFIRM"}
         </button>

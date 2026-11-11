@@ -96,7 +96,7 @@ export function ShopClient({
 
       {/* Categories (hidden on fixedCategory) */}
       {!fixedCategory && visibleCategories.length > 0 && (
-        <div className="border-t border-[#f0ece5] pt-5">
+        <div className="border-t border-line/60 pt-5">
           <label className="block text-[10.5px] font-bold tracking-[0.14em] uppercase text-ink mb-3">
             CATEGORIES
           </label>
@@ -115,7 +115,7 @@ export function ShopClient({
                       type="checkbox"
                       checked={isChecked}
                       onChange={() => handleToggleCategory(cat.handle)}
-                      className="rounded border-line text-ink focus:ring-ink h-3.5 w-3.5 cursor-pointer accent-[#1c1a17]"
+                      className="rounded border-line text-ink focus:ring-ink h-3.5 w-3.5 cursor-pointer accent-ink"
                     />
                     <span className="font-medium">{cat.name}</span>
                   </div>
@@ -130,7 +130,7 @@ export function ShopClient({
       )}
 
       {/* Price Range */}
-      <div className="border-t border-[#f0ece5] pt-5">
+      <div className="border-t border-line/60 pt-5">
         <label className="block text-[10.5px] font-bold tracking-[0.14em] uppercase text-ink mb-2">
           PRICE RANGE
         </label>
@@ -164,7 +164,7 @@ export function ShopClient({
       </div>
 
       {/* In Stock Only */}
-      <div className="border-t border-[#f0ece5] pt-5">
+      <div className="border-t border-line/60 pt-5">
         <label className="flex items-center justify-between text-xs text-ink hover:text-ink/80 cursor-pointer select-none">
           <span className="text-[10.5px] font-bold tracking-[0.14em] uppercase text-ink">
             IN STOCK ONLY
@@ -175,7 +175,7 @@ export function ShopClient({
             onChange={(e) =>
               updateParams({ stock: e.target.checked ? "1" : null })
             }
-            className="rounded border-line text-ink focus:ring-ink h-4 w-4 cursor-pointer accent-[#1c1a17]"
+            className="rounded border-line text-ink focus:ring-ink h-4 w-4 cursor-pointer accent-ink"
           />
         </label>
       </div>
@@ -184,7 +184,7 @@ export function ShopClient({
       {catalogOptions.map((opt) => {
         const activeVals = activeOptionFilters.get(opt.title) || [];
         return (
-          <div key={opt.title} className="border-t border-[#f0ece5] pt-5">
+          <div key={opt.title} className="border-t border-line/60 pt-5">
             <label className="block text-[10.5px] font-bold tracking-[0.14em] uppercase text-ink mb-2.5">
               {opt.title.toUpperCase()}
             </label>
@@ -202,7 +202,7 @@ export function ShopClient({
                       onChange={() =>
                         handleToggleOptionValue(opt.title, opt.paramName, val)
                       }
-                      className="rounded border-line text-ink focus:ring-ink h-3.5 w-3.5 cursor-pointer accent-[#1c1a17]"
+                      className="rounded border-line text-ink focus:ring-ink h-3.5 w-3.5 cursor-pointer accent-ink"
                     />
                     <span>{val}</span>
                   </label>
@@ -215,7 +215,7 @@ export function ShopClient({
 
       {/* Clear All inside mobile sheet */}
       {isMobileSheet && hasActiveFilters && (
-        <div className="border-t border-[#f0ece5] pt-4">
+        <div className="border-t border-line/60 pt-4">
           <button
             type="button"
             onClick={handleClearAllFilters}
@@ -272,7 +272,7 @@ export function ShopClient({
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
         {/* Desktop Left Sidebar */}
         <aside className="hidden lg:block lg:col-span-3 bg-white p-6 rounded-md border border-line sticky top-24">
-          <div className="flex items-center justify-between pb-3 border-b border-[#f0ece5] mb-4">
+          <div className="flex items-center justify-between pb-3 border-b border-line/60 mb-4">
             <span className="text-[13px] font-bold tracking-[0.14em] uppercase text-ink">
               Filters
             </span>
@@ -371,7 +371,7 @@ export function ShopClient({
                   <button
                     type="button"
                     onClick={handleClearAllFilters}
-                    className="inline-flex items-center gap-1.5 text-xs font-semibold px-4 py-2 rounded bg-ink text-white hover:bg-[#3a352e] transition cursor-pointer uppercase tracking-wider"
+                    className="inline-flex items-center gap-1.5 text-xs font-semibold px-4 py-2 rounded bg-ink text-white hover:bg-ink-hover transition cursor-pointer uppercase tracking-wider"
                   >
                     <RotateCcw size={13} />
                     <span>Clear filters</span>
@@ -439,7 +439,7 @@ export function ShopClient({
               <button
                 type="button"
                 onClick={() => setIsMobileFiltersOpen(false)}
-                className="w-full py-3 bg-ink hover:bg-[#3a352e] text-white text-xs font-semibold rounded uppercase tracking-wider transition flex items-center justify-center gap-2 cursor-pointer"
+                className="w-full py-3 bg-ink hover:bg-ink-hover text-white text-xs font-semibold rounded uppercase tracking-wider transition flex items-center justify-center gap-2 cursor-pointer"
               >
                 <Check size={14} />
                 <span>Apply ({sortedProducts.length} results)</span>

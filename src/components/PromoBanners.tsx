@@ -30,7 +30,7 @@ export function PromoBanners({ banners: all }: PromoBannersProps) {
               return (
                 <div
                   key={banner.id}
-                  className="relative rounded-[6px] overflow-hidden min-h-[360px] sm:min-h-[380px] bg-[#cfd6d2] group flex flex-col justify-center shadow-xs border border-line/50"
+                  className="relative rounded-[6px] overflow-hidden min-h-[360px] sm:min-h-[380px] bg-card group flex flex-col justify-center shadow-xs border border-line/50"
                 >
                   {banner.image_url && (
                     <Image
@@ -52,24 +52,24 @@ export function PromoBanners({ banners: all }: PromoBannersProps) {
 
                   <div className="relative z-10 p-8 sm:p-10 max-w-[380px]">
                     {banner.label && (
-                      <p className="text-[11px] font-semibold tracking-[0.28em] uppercase text-[#4b463d] mb-4">
+                      <p className="text-[11px] font-semibold tracking-[0.28em] uppercase text-ink/80 mb-4">
                         {banner.label}
                       </p>
                     )}
                     {banner.title && (
-                      <h2 className="font-serif text-[30px] sm:text-[36px] font-medium leading-[1.18] text-[#26221c] mb-4">
+                      <h2 className="font-serif text-[30px] sm:text-[36px] font-medium leading-[1.18] text-ink mb-4">
                         {banner.title}
                       </h2>
                     )}
                     {banner.text && (
-                      <p className="text-[12.5px] leading-[1.75] text-[#5c564c] mb-7 whitespace-pre-line">
+                      <p className="text-[12.5px] leading-[1.75] text-aura-gray mb-7 whitespace-pre-line">
                         {banner.text}
                       </p>
                     )}
                     {href && (
                       <Link
                         href={href}
-                        className="inline-flex items-center gap-2 text-[11px] font-semibold tracking-[0.18em] uppercase text-[#26221c] hover:opacity-60 transition-opacity group"
+                        className="inline-flex items-center gap-2 text-[11px] font-semibold tracking-[0.18em] uppercase text-ink hover:opacity-60 transition-opacity group"
                       >
                         <span>{banner.button_label || "EXPLORE COLLECTION"}</span>
                         <ArrowRight className="w-[15px] h-[15px] group-hover:translate-x-1 transition-transform" />
@@ -84,7 +84,7 @@ export function PromoBanners({ banners: all }: PromoBannersProps) {
             return (
               <div
                 key={banner.id}
-                className="relative rounded-[6px] overflow-hidden min-h-[360px] sm:min-h-[380px] bg-[#ede2da] flex flex-col justify-center shadow-xs border border-line/50"
+                className="relative rounded-[6px] overflow-hidden min-h-[360px] sm:min-h-[380px] bg-card flex flex-col justify-center shadow-xs border border-line/50"
               >
                 {banner.image_url && (
                   <div className="absolute right-0 bottom-0 top-0 w-[48%] sm:w-[50%] pointer-events-none overflow-hidden">

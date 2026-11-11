@@ -69,7 +69,7 @@ export default async function HomePage() {
               </p>
               <Link
                 href="/shop"
-                className="inline-flex items-center gap-2.5 bg-ink text-white text-[11px] font-semibold tracking-[0.18em] uppercase px-[30px] py-[16px] hover:bg-[#3a352e] transition-colors group"
+                className="inline-flex items-center gap-2.5 bg-ink text-white text-[11px] font-semibold tracking-[0.18em] uppercase px-[30px] py-[16px] hover:bg-ink-hover transition-colors group"
               >
                 <span>SHOP NOW</span>
                 <ArrowRight className="w-[15px] h-[15px] group-hover:translate-x-1 transition-transform" />

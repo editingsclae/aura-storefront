@@ -75,7 +75,7 @@ export function ProductDetailsClient({ product }: ProductDetailsClientProps) {
       {groups.map((group) => (
         <div
           key={group.id}
-          className="pb-4 border-b border-[#f0ece5]"
+          className="pb-4 border-b border-line/60"
           data-testid={`option-${group.title}`}
         >
           <div className="flex items-center justify-between mb-2.5">
@@ -124,7 +124,7 @@ export function ProductDetailsClient({ product }: ProductDetailsClientProps) {
 
       {/* Plain list of variants for items without configurable options */}
       {groups.length === 0 && variants.length > 1 && (
-        <div className="pb-4 border-b border-[#f0ece5]">
+        <div className="pb-4 border-b border-line/60">
           <div className="text-[10px] font-bold tracking-[0.14em] uppercase text-ink mb-2.5">
             SELECT VARIANT
           </div>
@@ -187,7 +187,7 @@ export function ProductDetailsClient({ product }: ProductDetailsClientProps) {
             type="button"
             onClick={handleAddToCart}
             disabled={isAdding || cartLoading || isOutOfStock}
-            className="flex-1 inline-flex items-center justify-center gap-2.5 bg-ink text-white text-[11px] font-semibold tracking-[0.18em] uppercase py-3.5 px-6 rounded hover:bg-[#3a352e] disabled:bg-zinc-300 disabled:cursor-not-allowed transition cursor-pointer"
+            className="flex-1 inline-flex items-center justify-center gap-2.5 bg-ink text-white text-[11px] font-semibold tracking-[0.18em] uppercase py-3.5 px-6 rounded hover:bg-ink-hover disabled:bg-zinc-300 disabled:cursor-not-allowed transition cursor-pointer"
           >
             <ShoppingBag size={16} />
             <span>

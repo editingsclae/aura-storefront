@@ -30,7 +30,7 @@ export default function NotFound() {
           </Link>
           <Link
             href="/shop"
-            className="inline-flex items-center gap-1.5 px-5 py-3 text-[11px] font-semibold tracking-wider uppercase rounded bg-ink hover:bg-[#3a352e] text-white transition-colors shadow-xs"
+            className="inline-flex items-center gap-1.5 px-5 py-3 text-[11px] font-semibold tracking-wider uppercase rounded bg-ink hover:bg-ink-hover text-white transition-colors shadow-xs"
           >
             <ShoppingBag size={13} />
             <span>BROWSE SHOP</span>
