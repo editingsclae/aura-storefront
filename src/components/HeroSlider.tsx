@@ -131,23 +131,7 @@ export function HeroSlider({ slides }: HeroSliderProps) {
 
         {count > 1 && (
           <>
-            <button
-              type="button"
-              onClick={() => go(current - 1)}
-              aria-label="Previous slide"
-              className="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full border border-line bg-white/80 hover:bg-white text-ink flex items-center justify-center transition shadow-xs cursor-pointer"
-            >
-              <ChevronLeft size={18} />
-            </button>
-            <button
-              type="button"
-              onClick={() => go(current + 1)}
-              aria-label="Next slide"
-              className="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full border border-line bg-white/80 hover:bg-white text-ink flex items-center justify-center transition shadow-xs cursor-pointer"
-            >
-              <ChevronRight size={18} />
-            </button>
-
+            {/* Dot indicators — centered */}
             <div className="absolute bottom-5 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2">
               {slides.map((s, i) => (
                 <button
@@ -161,6 +145,26 @@ export function HeroSlider({ slides }: HeroSliderProps) {
                   }`}
                 />
               ))}
+            </div>
+
+            {/* Prev / Next buttons — bottom-right */}
+            <div className="absolute bottom-5 right-6 z-20 flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => go(current - 1)}
+                aria-label="Previous slide"
+                className="w-9 h-9 rounded-full border border-line bg-white/80 hover:bg-white text-ink flex items-center justify-center transition shadow-xs cursor-pointer"
+              >
+                <ChevronLeft size={16} />
+              </button>
+              <button
+                type="button"
+                onClick={() => go(current + 1)}
+                aria-label="Next slide"
+                className="w-9 h-9 rounded-full border border-line bg-white/80 hover:bg-white text-ink flex items-center justify-center transition shadow-xs cursor-pointer"
+              >
+                <ChevronRight size={16} />
+              </button>
             </div>
           </>
         )}
