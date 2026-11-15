@@ -101,20 +101,24 @@ export function ProductCard({ product }: ProductCardProps) {
         )}
 
         {/* Price & Action Row */}
-        <div className="flex items-center justify-between pt-2 border-t border-line/60 mt-auto">
-          <div className="text-[13.5px] font-bold text-ink">
+        <div className="flex items-center justify-between gap-3 pt-2 border-t border-line/60 mt-auto">
+          {/* The prices wrap onto a second line when the card is narrow, so a long
+              "From 38.40 48.00" never runs into the Options link */}
+          <div className="min-w-0 flex flex-wrap items-baseline gap-x-1.5 text-[13.5px] font-bold text-ink">
             {hasRange && range ? (
               <>
-                <span className="mr-1 text-xs font-medium text-aura-gray">From</span>
-                {formatPrice(range.low, range.currency)}
+                <span className="text-xs font-medium text-aura-gray">From</span>
+                <span className="whitespace-nowrap">{formatPrice(range.low, range.currency)}</span>
               </>
             ) : price ? (
-              formatPrice(price.calculated_amount, price.currency_code)
+              <span className="whitespace-nowrap">
+                {formatPrice(price.calculated_amount, price.currency_code)}
+              </span>
             ) : (
               <span className="text-aura-gray text-xs">Price on request</span>
             )}
             {originalAmount !== null && (hasRange ? range : price) && (
-              <span className="ml-1.5 text-xs font-medium text-aura-gray line-through">
+              <span className="whitespace-nowrap text-xs font-medium text-aura-gray line-through">
                 {formatPrice(
                   originalAmount,
                   hasRange && range ? range.currency : price!.currency_code
@@ -123,7 +127,7 @@ export function ProductCard({ product }: ProductCardProps) {
             )}
           </div>
 
-          <div>
+          <div className="shrink-0">
             {canQuickAdd && singleVariant ? (
               <button
                 type="button"
@@ -141,7 +145,7 @@ export function ProductCard({ product }: ProductCardProps) {
             ) : (
               <Link
                 href={`/p/${product.handle}`}
-                className="text-[10px] font-semibold tracking-wider uppercase text-aura-gray hover:text-ink transition-colors flex items-center gap-1"
+                className="whitespace-nowrap text-[10px] font-semibold tracking-wider uppercase text-aura-gray hover:text-ink transition-colors flex items-center gap-1"
               >
                 <span>Options</span>
                 <ArrowRight className="w-3 h-3" />
