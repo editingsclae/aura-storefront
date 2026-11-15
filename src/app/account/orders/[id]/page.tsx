@@ -179,6 +179,15 @@ export default function OrderDetailPage({ params }: OrderDetailPageProps) {
               </span>
             </div>
 
+            {totals.hasDiscountTotal && (
+              <div className="flex justify-between text-aura-gray">
+                <span>Discount</span>
+                <span className="font-mono font-semibold text-ink">
+                  -{formatPrice(totals.discountTotal, currency)}
+                </span>
+              </div>
+            )}
+
             <div className="flex justify-between text-aura-gray">
               <span>Shipping</span>
               <span className="font-mono font-semibold text-ink">

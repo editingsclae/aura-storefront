@@ -7,6 +7,7 @@ import { formatPrice } from "@/logic";
 import { getLineItemState } from "@/logic/cart-view";
 import { useCartPage } from "@/logic/use-cart-view";
 import { Minus, Plus, X, ShoppingBag, ArrowLeft, Package } from "lucide-react";
+import { CouponBox } from "@/components/CouponBox";
 
 export default function CartPage() {
   const {
@@ -192,6 +193,8 @@ export default function CartPage() {
             ORDER SUMMARY
           </h2>
 
+          <CouponBox />
+
           <div className="space-y-3 pt-2 text-xs">
             <div className="flex justify-between text-aura-gray">
               <span>Subtotal</span>
@@ -199,6 +202,15 @@ export default function CartPage() {
                 {formatPrice(totals.itemsSubtotal, currencyCode)}
               </span>
             </div>
+
+            {totals.hasDiscountTotal && (
+              <div className="flex justify-between text-aura-gray">
+                <span>Discount</span>
+                <span className="text-ink font-semibold font-mono">
+                  -{formatPrice(totals.discountTotal, currencyCode)}
+                </span>
+              </div>
+            )}
 
             <div className="flex justify-between text-aura-gray">
               <span>Shipping</span>

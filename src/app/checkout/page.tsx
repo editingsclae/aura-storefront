@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { formatPrice } from "@/logic";
 import { useCheckout } from "@/logic/use-checkout";
+import { CouponBox } from "@/components/CouponBox";
 
 export default function CheckoutPage() {
   const {
@@ -550,6 +551,10 @@ export default function CheckoutPage() {
             ))}
           </div>
 
+          <div className="pt-4 border-t border-line">
+            <CouponBox />
+          </div>
+
           {/* Totals Breakdown */}
           <div className="space-y-2.5 pt-4 border-t border-line text-xs">
             <div className="flex justify-between text-aura-gray">
@@ -558,6 +563,15 @@ export default function CheckoutPage() {
                 {formatPrice(totals.itemsSubtotal, currencyCode)}
               </span>
             </div>
+
+            {totals.hasDiscountTotal && (
+              <div className="flex justify-between text-aura-gray">
+                <span>Discount</span>
+                <span className="text-ink font-semibold font-mono">
+                  -{formatPrice(totals.discountTotal, currencyCode)}
+                </span>
+              </div>
+            )}
 
             <div className="flex justify-between text-aura-gray">
               <span>Shipping</span>
